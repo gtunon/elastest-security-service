@@ -1,113 +1,177 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  description: REST API description of the ElasTest TORM Module.
-  version: 1.0.0
-  title: ElasTest Torm REST API
+  description: "REST API description of the ElasTest Security Service Module."
+  version: "1.0.0"
+  title: "ElasTest Security Service REST API"
   license:
-    name: Apache 2.0
-    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-basePath: /ess
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  contact:
+    email: avinash.sudhodanan@imdea.org
+basePath: "/ess"
 tags:
-  - name: testmanagement
-    description: Test Management
-    externalDocs:
-      description: Find out more
-      url: 'http://swagger.io'
-  - name: testorchestration
-    description: Test Orchestation
+- name: "securitytestmanagement"
+  description: "Security Test Management"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
 schemes:
-  - https
+- "https"
 paths:
-  /stest:
+  /secjob:
     post:
       tags:
-        - Security Testing Project Creation
-      summary: Create a new security testing project.
-      description: Creates a new security testing project with the provided information.
-      operationId: createSTProject
+      - "secjob"
+      summary: "Create a new security testing job (secJob)."
+      description: "Creates a new secJob with the received information."
+      operationId: "createSecJob"
       consumes:
-        - application/json
+      - "application/json"
       produces:
-        - application/json
+      - "application/json"
       parameters:
-        - in: body
-          name: body
-          description: Security Testing project that needs to be created
-          required: true
-          schema:
-            $ref: '#/definitions/STProject'
+      - in: "body"
+        name: "body"
+        description: "secJob object that needs to create"
+        required: true
+        schema:
+          $ref: "#/definitions/SecJob"
       responses:
-        '200':
-          description: Project Created Successfully
+        200: 
+          description: "SecJob Creation OK"
           schema:
-            $ref: '#/definitions/STProject'
-        '405':
-          description: Invalid input
-definitions:
-  STProject:
-    type: object
+            $ref: "#/definitions/SecJob"
+        405:
+          description: "Invalid input. Failed to create secJob"
+    put:
+      tags:
+      - "secjob"
+      summary: "Modifies an existing secJob."
+      description: "Modifies an existing secJob received as a parameter."
+      operationId: "modifySecJob"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "secJob object that needs to modify."
+        required: true
+        schema:
+          $ref: "#/definitions/SecJob"
+      responses:
+        200: 
+          description: "SecJob Mofification OK"
+          schema:
+            $ref: "#/definitions/SecJob"
+        405:
+          description: "Invalid input. Failed to modify secJob"
+    get:
+      tags:
+      - "secjob"
+      summary: "Returns all secjobs."
+      description: "Returns all secJobs of the logged in user."
+      operationId: "getAllSecJobs"
+      consumes:
+      - "application/json"
+      responses:
+        200: 
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SecJob"
+        404:
+          description: "Resource not found"
+  /secjob/{secJobId}:
+    get:
+      tags:
+      - "secjob"
+      summary: "Returns a secJob."
+      description: "Returns the secJob for a given secJobId. Returns its detail information."
+      operationId: "getSecJobById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "ID of secJob to retrieve."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SecJob"
+        400:
+          description: "secJob not found."
+    delete:
+      tags:
+      - "secjob"
+      summary: "Deletes a secJob." 
+      description: "Delete the secJob that matches with a given a secJobId." 
+      operationId: "deleteSecJob"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "ID of secJob to delete."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Deleteted successful"
+          schema:
+            $ref: "#/definitions/SecJob"
+        404:
+          description: "SecJob not found"
+  
+definitions: 
+  SecJob:
+    type: "object"
     required:
-      - name
-      - vulnsToTest
+    - "name"
     properties:
       id:
-        type: integer
-        format: int64
-        example: '12345678'
+        type: "integer"
+        format: "int64"
+        example: "87654321"
       name:
-        type: string
-        example: Hello World Project
-      vulnsToTest:
+        type: "string"
+        example: "secTest1"
+      vulns:
+        type: "array"
+        items:
+          $ref: "#/definitions/Vulnerabilities"
+      tJobIds:
         type: array
         items:
-          $ref: '#/definitions/STestService'
-      tJob:
-        type: object
-        $ref: '#/definitions/TJob'
-  STestService:
-    type: object
+          required:
+            - username
+          properties:
+            tJobId:
+              type: "integer"
+              format: "int64"
+              example: "12345678"
+              
+      maxRunTimeInMins:
+        type: "integer"
+        example: "10"
+  Vulnerabilities:
+    type: "object"
     properties:
-      serviceType:
-        type: string
-        example: userEmulator
+      vulnType: 
+        type: "string"
+        example: "Logical"
       name:
-        type: string
-        example: logical
-  TJob:
-    type: object
-    required:
-      - name
-      - testServices
-    properties:
-      id:
-        type: integer
-        format: int64
-        example: '12345678'
-      name:
-        type: string
-        example: testApp1
-      testServices:
-        type: array
-        items:
-          $ref: '#/definitions/TestService'
-      imageName:
-        type: string
-        example: testapp1
-      sut:
-        type: integer
-        example: '12345678'
-  TestService:
-    type: object
-    properties:
-      serviceType:
-        type: string
-        example: userEmulator
-      name:
-        type: string
-        example: chrome
+        type: "string"
+        example:  "Replay Attack"
       version:
-        type: integer
-        format: int64
+        type: "integer"
+        example: 1
+        format: "int32"
 externalDocs:
-  description: An elastic platform to ease end to end testing
-  url: 'http://elastest.io/'
+  description: "An elastic platform to ease end to end testing"
+  url: "http://elastest.io/" 
