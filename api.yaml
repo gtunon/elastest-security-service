@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  description: "REST API description of the ElasTest Security Service Module."
+  description: "REST API description of the ElasTest Security Service (ESS) module."
   version: "1.0.0"
   title: "ElasTest Security Service REST API"
   license:
@@ -38,7 +38,7 @@ paths:
           $ref: "#/definitions/SecJob"
       responses:
         200: 
-          description: "SecJob Creation OK"
+          description: "secJob creation OK"
           schema:
             $ref: "#/definitions/SecJob"
         405:
@@ -62,7 +62,7 @@ paths:
           $ref: "#/definitions/SecJob"
       responses:
         200: 
-          description: "SecJob Mofification OK"
+          description: "secJob Mofification OK"
           schema:
             $ref: "#/definitions/SecJob"
         405:
@@ -96,7 +96,7 @@ paths:
       parameters:
       - name: "secJobId"
         in: "path"
-        description: "ID of secJob to retrieve."
+        description: "Id of secJob to retrieve."
         required: true
         type: "integer"
         format: "int64"
@@ -116,7 +116,7 @@ paths:
       parameters:
       - name: "secJobId"
         in: "path"
-        description: "ID of secJob to delete."
+        description: "Id of secJob to delete."
         required: true
         type: "integer"
         format: "int64"
@@ -126,21 +126,21 @@ paths:
           schema:
             $ref: "#/definitions/SecJob"
         404:
-          description: "SecJob not found"
+          description: "secJob not found"
 
   /secjob/{secJobId}/exec:
     get:
       tags:
       - "secjob execution"
-      summary: "Returns all secJob Executions of a secJob." 
-      description: "Returns all secJob Executions of a secJob."
+      summary: "Returns all secJob executions of a secJob." 
+      description: "Returns all secJob executions of a secJob."
       operationId: "getSecJobsExecutionsBySecJob"
       produces:
       - "application/json"
       parameters:
       - name: "secJobId"
         in: "path"
-        description: "SecJob Id."
+        description: "secJob Id."
         required: true
         type: "integer"
         format: "int64"
@@ -152,19 +152,19 @@ paths:
             items:
               $ref: "#/definitions/SecJobExecution"
         404:
-          description: "SecJobs Executions not found"
+          description: "secJobs executions not found"
     post:
       tags:
       - "secjob execution"
-      summary: "Executes a SecJob."
-      description: "Runs the SecJob for a give secJobId and returns a Secjob Execution Id."
+      summary: "Executes a secJob."
+      description: "Runs the secJob for a give secJobId and returns a secJob execution id."
       operationId: "execSecJob"
       produces:
       - "application/json"
       parameters:
       - name: "secJobId"
         in: "path"
-        description: "SecJob Id."
+        description: "secJob id."
         required: true
         type: "integer"
         format: "int64"
@@ -176,26 +176,26 @@ paths:
         400:
           description: "Invalid ID supplied"
         404:
-          description: "SecJob not found"
+          description: "secJob not found"
   /secjob/{secJobId}/exec/{secJobExecId}:
     get:
       tags:
       - "secjob execution"
-      summary: "Returns a SecJob Execution." 
-      description: "Returns the secJob Execution for a given id."
+      summary: "Returns a secJob execution." 
+      description: "Returns the secJob execution for a given id."
       operationId: "getSecJobsExecution"
       produces:
       - "application/json"
       parameters:
       - name: "secJobId"
         in: "path"
-        description: "SecJob Id."
+        description: "secJob id."
         required: true
         type: "integer"
         format: "int64"
       - name: "secJobExecId"
         in: "path"
-        description: "SecJob Execution Id."
+        description: "secJob execution id."
         required: true
         type: "integer"
         format: "int64"
@@ -205,12 +205,12 @@ paths:
           schema:
             $ref: "#/definitions/SecJobExecution"
         404:
-          description: "SecJob Execution not found"
+          description: "secJob execution not found"
     delete:
       tags:
       - "secjob execution"
       summary: "Deletes a SecJob Execution."
-      description: "Deletes the SecJob Execution for a given id. Returns the id."
+      description: "Deletes the secJob execution for a given id. Returns the id."
       operationId: "deleteSecJobExecution"
       parameters:
       - name: "secJobId"
@@ -221,7 +221,7 @@ paths:
         format: "int64"
       - name: "secJobExecId"
         in: "path"
-        description: "SecJob Execution Id."
+        description: "secJob execution id."
         required: true
         type: "integer"
         format: "int64"
@@ -231,7 +231,7 @@ paths:
           schema:
             $ref: "#/definitions/SecJobExecution"
         404:
-          description: "SecJob Execution not found"
+          description: "secJob Execution not found"
   
 definitions: 
   SecJob:
@@ -299,7 +299,7 @@ definitions:
       error:
         type: "string"
       report:
-        description: "Report of the Security Test Job execution"
+        description: "Report of the secJob execution"
         type: "array"
         items:
           $ref: "#/definitions/Report"
