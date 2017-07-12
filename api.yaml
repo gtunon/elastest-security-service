@@ -8,7 +8,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
   contact:
     email: avinash.sudhodanan@imdea.org
-basePath: "/ess"
+basePath: "/ess/api/v1.0/"
 tags:
 - name: "securitytestmanagement"
   description: "Security Test Management"
