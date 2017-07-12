@@ -18,7 +18,7 @@ tags:
 schemes:
 - "https"
 paths:
-  /secjob:
+  /secjobs:
     post:
       tags:
       - "secjob"
@@ -84,7 +84,7 @@ paths:
               $ref: "#/definitions/SecJob"
         404:
           description: "Resource not found"
-  /secjob/{secJobId}:
+  /secjobs/{secJobId}:
     get:
       tags:
       - "secjob"
@@ -128,7 +128,7 @@ paths:
         404:
           description: "secJob not found"
 
-  /secjob/{secJobId}/exec:
+  /secjobs/{secJobId}/exec:
     get:
       tags:
       - "secjob execution"
@@ -177,7 +177,7 @@ paths:
           description: "Invalid ID supplied"
         404:
           description: "secJob not found"
-  /secjob/{secJobId}/exec/{secJobExecId}:
+  /secjobs/{secJobId}/exec/{secJobExecId}:
     get:
       tags:
       - "secjob execution"
