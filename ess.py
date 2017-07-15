@@ -1,6 +1,7 @@
-#!flask/bin/python
 from flask import Flask, jsonify, abort, request, make_response, url_for
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
+import subprocess
+import time
 
 app = Flask(__name__, static_url_path = "")
 auth = HTTPBasicAuth()
@@ -43,13 +44,14 @@ def get_secjob(secjob_id):
         abort(404)
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
 
+
 @app.route('/ess/api/v1.0/secjobs', methods = ['POST'])
 def create_secjob():
     if not request.json or not 'name' in request.json:
         abort(400)
     secjob = {
         'id': secjobs[-1]['id'] + 1,
-        'title': request.json['name'],
+        'name': request.json['name'],
         'vulns': request.json['vulns'],
         'tJobId': request.json['tJobId'],
         'maxRunTimeInMins': request.json['maxRunTimeInMins']
@@ -62,17 +64,33 @@ def update_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
         abort(404)
+    
     if not request.json:
         abort(400)
-    if 'title' in request.json and type(request.json['title']) != unicode:
+    print 'id' in request.json
+    if 'id' in request.json and type(request.json['id']) != int:
         abort(400)
-    if 'description' in request.json and type(request.json['description']) is not unicode:
+    
+    if 'maxRunTimeInMins' in request.json and type(request.json['maxRunTimeInMins']) != int:
         abort(400)
-    if 'done' in request.json and type(request.json['done']) is not bool:
+    
+    if 'name' in request.json and type(request.json['name']) != unicode:
         abort(400)
-    secjob[0]['title'] = request.json.get('title', secjob[0]['title'])
-    secjob[0]['description'] = request.json.get('description', secjob[0]['description'])
-    secjob[0]['done'] = request.json.get('done', secjob[0]['done'])
+    if 'tJobId' in request.json and type(request.json['tJobId']) != int:
+        abort(400)
+    if 'vulns' in request.json and type(request.json['vulns']) != list:
+        abort(400)
+    if 'name' in request.json['vulns'] and type(request.json['vulns']['name']) != unicode:
+        abort(400)
+    if 'version' in request.json['vulns'] and type(request.json['vulns']['version']) != int:
+        abort(400)
+    if 'vulnType' in request.json['vulns'] and type(request.json['vulns']['vulnType']) != unicode:
+        abort(400)
+    
+    secjob[0]['maxRunTimeInMins'] = request.json.get('maxRunTimeInMins', secjob[0]['maxRunTimeInMins'])
+    secjob[0]['name'] = request.json.get('name', secjob[0]['name'])
+    secjob[0]['tJobId'] = request.json.get('maxRunTimeInMins', secjob[0]['maxRunTimeInMins'])
+    secjob[0]['vulns'] = request.json.get('vulns', secjob[0]['vulns'])
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
     
 @app.route('/ess/api/v1.0/secjobs/<int:secjob_id>', methods = ['DELETE'])
@@ -82,6 +100,46 @@ def delete_secjob(secjob_id):
         abort(404)
     secjobs.remove(secjob[0])
     return jsonify( { 'result': True } )
-    
+
+@app.route('/ess/api/v1.0/tjobs/<int:tjob_id>/exec', methods = ['GET'])
+def execute_tjob(tjob_id):
+    if tjob_id==1:
+        proc = subprocess.Popen("docker run dockernash/tjob-tomato-norm:v1", stdout=subprocess.PIPE, shell=True)
+    #proc.wait()
+    	(result,err) =proc.communicate()
+    	proc.wait()
+    	print type(result)
+    	print len(result)
+    	if "OK" in result:
+             return jsonify( { 'result': "tJob execution successful" } )
+    	else:
+#TODO detech child process from parent
+             return jsonify( { 'result': "tJob execution successful"})
+    elif tjob_id==11:
+        proc = subprocess.Popen("docker run dockernash/tjob-tomato-mal:v1", stdout=subprocess.PIPE, shell=True)
+        #proc.wait()
+        (result,err) =proc.communicate()
+        proc.wait()
+        print type(result)
+        print len(result)
+        if "OK" in result:
+             return jsonify( { 'result': "tJob execution successful" } )
+        else:
+#TODO detach child process from parent
+             return jsonify( { 'result': "tJob execution successful" } )
+    else:
+        return jsonify( { 'result': "No tJob found with the provided id" })    
+
+@app.route('/ess/api/v1.0/secjobs/<int:secjob_id>/exec', methods = ['GET'])
+def execute_secjob(secjob_id):
+    time.sleep(5)
+    secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
+    if len(secjob) == 0:
+        abort(404)
+    if secjob[0]["id"]==1:
+             return jsonify( { 'result': "Attack tJob found with id 11 (visit http://127.0.0.1/ess/api/v1.0/tjobs/11/exec for executing it)" } )
+    else:
+             return jsonify( { 'result': "No tJobs found for tJobId mentioned in the secJob description" })
+
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(port=80)
