@@ -142,4 +142,4 @@ def execute_secjob(secjob_id):
              return jsonify( { 'result': "No tJobs found for tJobId mentioned in the secJob description" })
 
 if __name__ == '__main__':
-    app.run(port=80)
+    app.run(host='0.0.0.0', port=80)
