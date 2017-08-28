@@ -8,7 +8,10 @@ Copyright © 2017-2019 [ElasTest]. Licensed under [Apache 2.0 License].
 elastest-security-service
 ==============================
 
-ElasTest Security Service REST API.
+The ElasTest Security Service (ESS) can be used to test whether there are security vulnerabilities in the System Under Test (SuT). A tester provides a tJob as input to the ESS and ESS generates one or more tJobs that helps in identifying a security vulnerability. ESS targets three different types of vulnerabilities:
+1. Logical vulnerabiilities
+2. Denial-of-Service
+3. Improper/Missing authentication
 
 What is ElasTest
 -----------------
