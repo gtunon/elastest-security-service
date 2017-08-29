@@ -9,10 +9,11 @@ Copyright © 2017-2019 [ElasTest]. Licensed under [Apache 2.0 License].
 elastest-security-service
 ==============================
 
-The ElasTest Security Service (ESS) can be used to test whether there are security vulnerabilities in the System Under Test (SuT). A tester provides a tJob as input to the ESS and ESS generates one or more tJobs that helps in identifying a security vulnerability. ESS supports the detection of three different types of vulnerabilities:
+The ElasTest Security Service (ESS) can be used to detect security vulnerabilities in the System Under Test (SuT). A tester provides a tJob (e.g., a docker container containing a functional test of the SuT) as input to the ESS and ESS generates one or more tJobs that helps in identifying a security vulnerability. ESS supports the detection of three different types of vulnerabilities:
 1. Logical vulnerabiilities
 2. Denial-of-Service
 3. Improper/Missing authentication
+The documentation for using the component is available [here](https://docs.google.com/document/d/1bKEMpXKUAaE0Re7hNxCKY99D6HSuy96cwqZ5rQkEERs/edit?usp=sharing).
 
 What is ElasTest
 -----------------
