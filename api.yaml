@@ -19,6 +19,23 @@ schemes:
 - "https"
 paths:
   /secjobs:
+    get:
+      tags:
+      - "secjob"
+      summary: "Returns all secjobs."
+      description: "Returns all secJobs of the logged in user."
+      operationId: "getAllSecJobs"
+      consumes:
+      - "application/json"
+      responses:
+        200: 
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SecJob"
+        404:
+          description: "Resource not found"
     post:
       tags:
       - "secjob"
@@ -67,23 +84,6 @@ paths:
             $ref: "#/definitions/SecJob"
         405:
           description: "Invalid input. Failed to modify secJob"
-    get:
-      tags:
-      - "secjob"
-      summary: "Returns all secjobs."
-      description: "Returns all secJobs of the logged in user."
-      operationId: "getAllSecJobs"
-      consumes:
-      - "application/json"
-      responses:
-        200: 
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/SecJob"
-        404:
-          description: "Resource not found"
   /secjobs/{secJobId}:
     get:
       tags:
