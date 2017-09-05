@@ -250,16 +250,10 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Vulnerabilities"
-      tJobIds:
-        type: array
-        items:
-          required:
-            - tJobId
-          properties:
-            tJobId:
-              type: "integer"
-              format: "int64"
-              example: "12345678"
+      tJobId:
+        type: "integer"
+        format: "int64"
+        example: "12345678"
               
       maxRunTimeInMins:
         type: "integer"
