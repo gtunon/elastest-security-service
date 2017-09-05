@@ -30,5 +30,5 @@ The API description is [available](http://elastest.io/docs/api/ess/).
 ### Architecture
 
 ESS is implemented in two parts:
-* ESS Web client Application
-* ESS Server Application
+* ESS Web client Application: A web-based GUI for interacting with the ESS API
+* ESS Server Application: The back-end of the ESS API
