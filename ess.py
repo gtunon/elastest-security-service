@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, abort, request, make_response, url_for
+from flask import Flask, jsonify, abort, request, make_response, url_for, render_template
 from flask_httpauth import HTTPBasicAuth
 import subprocess
 import time
@@ -32,12 +32,16 @@ def make_public_secjob(secjob):
     for field in secjob:
         new_secjob[field] = secjob[field]
     return new_secjob
-    
-@app.route('/ess/api/v1.0/secjobs', methods = ['GET'])
+
+@app.route('/', methods = ['GET'])
+def get_gui():
+    return render_template('ess.html')
+
+@app.route('/ess/api/v0.1/secjobs', methods = ['GET'])
 def get_secjobs():
     return jsonify( { 'secjobs': map(make_public_secjob, secjobs) } )
 
-@app.route('/ess/api/v1.0/secjobs/<int:secjob_id>', methods = ['GET'])
+@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['GET'])
 def get_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -45,7 +49,7 @@ def get_secjob(secjob_id):
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
 
 
-@app.route('/ess/api/v1.0/secjobs', methods = ['POST'])
+@app.route('/ess/api/v0.1/secjobs', methods = ['POST'])
 def create_secjob():
     if not request.json or not 'name' in request.json:
         abort(400)
@@ -59,7 +63,7 @@ def create_secjob():
     secjobs.append(secjob)
     return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
 
-@app.route('/ess/api/v1.0/secjobs/<int:secjob_id>', methods = ['PUT'])
+@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['PUT'])
 def update_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -93,7 +97,7 @@ def update_secjob(secjob_id):
     secjob[0]['vulns'] = request.json.get('vulns', secjob[0]['vulns'])
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
     
-@app.route('/ess/api/v1.0/secjobs/<int:secjob_id>', methods = ['DELETE'])
+@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['DELETE'])
 def delete_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -101,7 +105,7 @@ def delete_secjob(secjob_id):
     secjobs.remove(secjob[0])
     return jsonify( { 'result': True } )
 
-@app.route('/ess/api/v1.0/tjobs/<int:tjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/v0.1/tjobs/<int:tjob_id>/exec', methods = ['GET'])
 def execute_tjob(tjob_id):
     if tjob_id==1:
         proc = subprocess.Popen("docker run dockernash/tjob-tomato-norm:v1", stdout=subprocess.PIPE, shell=True)
@@ -130,7 +134,7 @@ def execute_tjob(tjob_id):
     else:
         return jsonify( { 'result': "No tJob found with the provided id" })    
 
-@app.route('/ess/api/v1.0/secjobs/<int:secjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
     time.sleep(5)
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
