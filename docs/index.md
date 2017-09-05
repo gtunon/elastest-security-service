@@ -17,18 +17,13 @@ The current version of ESS (v0.1) has the following features.
 
 ## How to run
 
-ESS can be installed by running the following commands
+ESS can be installed by running the following documentation provided [here](https://docs.google.com/document/d/1bKEMpXKUAaE0Re7hNxCKY99D6HSuy96cwqZ5rQkEERs/edit?usp=sharing).
 
 ## Basic usage
 
-When ElasTest TORM is started, it is accessible in the following URL:
-- Linux: http://localhost:8091/
-- Windows: http://\<docker-host>:8091/ (where \<docker-host> is obtained executing the command `docker-machine ip`)
-
-EUS web interface is accessible from the option EUS in the sidebar of the main ElasTest TORM web interface.
-
-![EUS main graphical web interface](imgs/main-gui.png)</p>
-
+When ElasTest ESS is started, its API is accessible in the following URL:
+- Linux & Windows: http://localhost:80/
+The API description is [available](http://elastest.io/docs/api/ess/).
 
 ## Development documentation
 
