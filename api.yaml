@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   description: "REST API description of the ElasTest Security Service (ESS) module."
-  version: "1.0.0"
+  version: "0.1.0"
   title: "ElasTest Security Service REST API"
   license:
     name: "Apache 2.0"
