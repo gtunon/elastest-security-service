@@ -1,0 +1,323 @@
+swagger: "2.0"
+info:
+  description: "REST API description of the ElasTest Security Service (ESS) module."
+  version: "1.0.0"
+  title: "ElasTest Security Service REST API"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  contact:
+    email: avinash.sudhodanan@imdea.org
+basePath: "/ess/api/v1.0/"
+tags:
+- name: "securitytestmanagement"
+  description: "Security Test Management"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+schemes:
+- "https"
+paths:
+  /secjobs:
+    post:
+      tags:
+      - "secjob"
+      summary: "Create a new security testing job (secJob)."
+      description: "Creates a new secJob with the received information."
+      operationId: "createSecJob"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "secJob object that needs to create"
+        required: true
+        schema:
+          $ref: "#/definitions/SecJob"
+      responses:
+        200: 
+          description: "secJob creation OK"
+          schema:
+            $ref: "#/definitions/SecJob"
+        405:
+          description: "Invalid input. Failed to create secJob"
+    put:
+      tags:
+      - "secjob"
+      summary: "Modifies an existing secJob."
+      description: "Modifies an existing secJob received as a parameter."
+      operationId: "modifySecJob"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "secJob object that needs to modify."
+        required: true
+        schema:
+          $ref: "#/definitions/SecJob"
+      responses:
+        200: 
+          description: "secJob Mofification OK"
+          schema:
+            $ref: "#/definitions/SecJob"
+        405:
+          description: "Invalid input. Failed to modify secJob"
+    get:
+      tags:
+      - "secjob"
+      summary: "Returns all secjobs."
+      description: "Returns all secJobs of the logged in user."
+      operationId: "getAllSecJobs"
+      consumes:
+      - "application/json"
+      responses:
+        200: 
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SecJob"
+        404:
+          description: "Resource not found"
+  /secjobs/{secJobId}:
+    get:
+      tags:
+      - "secjob"
+      summary: "Returns a secJob."
+      description: "Returns the secJob for a given secJobId. Returns its detail information."
+      operationId: "getSecJobById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "Id of secJob to retrieve."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SecJob"
+        400:
+          description: "secJob not found."
+    delete:
+      tags:
+      - "secjob"
+      summary: "Deletes a secJob." 
+      description: "Delete the secJob that matches with a given a secJobId." 
+      operationId: "deleteSecJob"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "Id of secJob to delete."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Deleteted successful"
+          schema:
+            $ref: "#/definitions/SecJob"
+        404:
+          description: "secJob not found"
+
+  /secjobs/{secJobId}/exec:
+    get:
+      tags:
+      - "secjob execution"
+      summary: "Returns all secJob executions of a secJob." 
+      description: "Returns all secJob executions of a secJob."
+      operationId: "getSecJobsExecutionsBySecJob"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "secJob Id."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/SecJobExecution"
+        404:
+          description: "secJobs executions not found"
+    post:
+      tags:
+      - "secjob execution"
+      summary: "Executes a secJob."
+      description: "Runs the secJob for a give secJobId and returns a secJob execution id."
+      operationId: "execSecJob"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "secJob id."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/SecJobExecution"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "secJob not found"
+  /secjobs/{secJobId}/exec/{secJobExecId}:
+    get:
+      tags:
+      - "secjob execution"
+      summary: "Returns a secJob execution." 
+      description: "Returns the secJob execution for a given id."
+      operationId: "getSecJobsExecution"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "secJob id."
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "secJobExecId"
+        in: "path"
+        description: "secJob execution id."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SecJobExecution"
+        404:
+          description: "secJob execution not found"
+    delete:
+      tags:
+      - "secjob execution"
+      summary: "Deletes a SecJob Execution."
+      description: "Deletes the secJob execution for a given id. Returns the id."
+      operationId: "deleteSecJobExecution"
+      parameters:
+      - name: "secJobId"
+        in: "path"
+        description: "SecJob Id."
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "secJobExecId"
+        in: "path"
+        description: "secJob execution id."
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/SecJobExecution"
+        404:
+          description: "secJob Execution not found"
+  
+definitions: 
+  SecJob:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: "87654321"
+      name:
+        type: "string"
+        example: "secTest1"
+      vulns:
+        type: "array"
+        items:
+          $ref: "#/definitions/Vulnerabilities"
+      tJobIds:
+        type: array
+        items:
+          required:
+            - tJobId
+          properties:
+            tJobId:
+              type: "integer"
+              format: "int64"
+              example: "12345678"
+              
+      maxRunTimeInMins:
+        type: "integer"
+        example: "10"
+  Vulnerabilities:
+    type: "object"
+    properties:
+      vulnType: 
+        type: "string"
+        example: "Logical"
+      name:
+        type: "string"
+        example:  "Replay Attack"
+      version:
+        type: "integer"
+        example: 1
+        format: "int32"
+  SecJobExecution:
+    type: "object"
+    required:
+    - "id"
+    - "result"
+    - "duration"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      duration:
+        type: "integer"
+        format: "int64"
+      result: 
+        type: "string"
+        enum:
+        - "SUCCESS"
+        - "FAILURE"
+        - "IN PROGRESS"
+      error:
+        type: "string"
+      report:
+        description: "Report of the secJob execution"
+        type: "array"
+        items:
+          $ref: "#/definitions/Report"
+  Report:
+    type: "object"
+    properties:
+      secTestCaseId:
+        type: "integer"
+        format: "int32"
+        example: "1"
+      AttackFound:
+        type: "string"
+        format: "int32"
+        enum:
+        - "Yes"
+        - "No"
+      httpLog:
+        type: "string"
+externalDocs:
+  description: "An elastic platform to ease end to end testing"
+  url: "http://elastest.io/" 
