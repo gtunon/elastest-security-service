@@ -13,7 +13,7 @@ The current version of ESS (v0.1) has the following features.
 - Create a secJob from a tJob
 - Update and Delete secJobs
 - Execute a tJob associated to the secJob
-- Show the mockup of the creation of a malicious tJob that exposes a replay attack vulnerability in TomatoCart
+- Show the mockup of the creation of a malicious tJob that exposes a replay attack vulnerability in TomatoCart (an open source e-commerce web application)
 
 ## How to run
 
