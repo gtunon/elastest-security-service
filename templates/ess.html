@@ -8,11 +8,27 @@
 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <!--Import JQuery-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+      <script>
+              $(document).ready(function(){
+                  $("p").click(function(){
+                      $(this).hide();
+                  });
+              });
+      </script>
       <title>ElasTest Security Service</title>
+      <script>
+              $(document).ready(function(){
+                  $("#create-sjob").click(function(){
+                      $(this).hide();
+                  });
+              });
+      </script>
     </head>
     <body>
       <!--Import jQuery before materialize.js-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
 
 
@@ -22,88 +38,53 @@
           <div class="nav-wrapper blue">
             <a href="" class="brand-logo">ElasTest Security Service</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a href="#"><i class="material-icons">search</i></a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Contact</a></li>
+              <li><a class="active" href="#home">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
           </div>
         </nav>
         <!-- SecJob Operations -->
+        <div id="home">
+          <ul class="collapsible" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header active">
+                <i class="material-icons">create</i>Create New SecJob
+              </div>
+              <div class="collapsible-body">
+                <form>
+                  <div class="input-field">
+                    <input type="text" id="secjobname">
+                    <label class="active" for="secjobname">SecJob Name*</label>
+                  </div>
+                  <div class="input-field">
+                    <input type="text" id="tjobid">
+                    <label class="active" for="tjobid">TJob ID*</label>
+                  </div>
+                  <div class="input-field">
+                    <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
+                    <label class="active" for="secjobdesc">SecJob Description</label>
+                  </div>
+                  <a onclick="toast()" id="create-sjob" class="btn">Create</a>
+                </form>
+              </div>
+            </li>
 
-        <ul class="collapsible" data-collapsible="accordion">
-          <li>
-            <div class="collapsible-header active">
-              <i class="material-icons">create</i>Create New SecJob
-            </div>
-            <div class="collapsible-body">
-              <form>
-                <div class="input-field">
-                  <input type="text" id="secjobname">
-                  <label class="active" for="secjobname">SecJob Name*</label>
-                </div>
-                <div class="input-field">
-                  <input type="text" id="tjobname">
-                  <label class="active" for="tjobname">TJob Name</label>
-                </div>
-                <div class="input-field">
-                  <input type="text" id="tjobid">
-                  <label class="active" for="tjobid">TJob ID*</label>
-                </div>
-                <div class="input-field">
-                  <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
-                  <label class="active" for="secjobdesc">SecJob Description</label>
-                </div>
-                <a onclick="toast()" class="btn">Create</a>
-              </form>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header">
-              <i class="material-icons">view_list</i>View Past SecJobs
-            </div>
-            <div class="collapsible-body">
-              <ul class="collection">
-                 <li class="collection-item avatar">
-                   <i class="material-icons circle green">brightness_high</i>
-                   <span class="title">SecJob 1</span>
-                   <p>Name: TomatoCart Sec Test <br>
-                      Id: tom_123
-                   </p>
-                   <a href="#!" class="secondary-content"><i class="material-icons">info_outline</i></a>
-                 </li>
-                 <li class="collection-item avatar">
-                   <i class="material-icons circle green">brightness_high</i>
-                   <span class="title">SecJob 2</span>
-                   <p>Name: OpenCart SecTest <br>
-                      Id: op_123
-                   </p>
-                   <a href="#!" class="secondary-content"><i class="material-icons">info_outline</i></a>
-                 </li>
-                 <li class="collection-item avatar">
-                   <i class="material-icons circle red">add_alarm</i>
-                   <span class="title">SecJob 3</span>
-                   <p>Name: AbanteCart SecTest <br>
-                      Id: ab_123
-                   </p>
-                   <a href="#!" class="secondary-content"><i class="material-icons">info_outline</i></a>
-                 </li>
-               </ul>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header">
-              <i class="material-icons">help</i>Help
-            </div>
-            <div class="collapsible-body">
-              <span>The ElasTest Security Service (ESS) can be used to identify replay attacks in web sites. All ESS requires is a previously defined TJob.</span>
-            </div>
-          </li>
-        </ul>
-      <div class="container">
-      <script type="text/javascript">
-        function toast() {
-          Materialize.toast('SecJob Created', 4000, 'rounded')
-        }
-      </script>
+            <li>
+              <div class="collapsible-header">
+                <i class="material-icons">help</i>Help
+              </div>
+              <div class="collapsible-body">
+                <span>The ElasTest Security Service can be used to identify insecure cookies of a web application.</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- JQuery Operations -->
+        <script type="text/javascript">
+          function toast() {
+            Materialize.toast('SecJob Created', 4000, 'rounded')
+          }
+        </script>
     </body>
   </html>
