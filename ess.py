@@ -151,14 +151,8 @@ def execute_tjob(tjob_id):
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
-    time.sleep(5)
-    secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
-    if len(secjob) == 0:
-        abort(404)
-    if secjob[0]["id"]==1:
-             return jsonify( { 'result': "Attack tJob found with id 11 (visit http://127.0.0.1/ess/api/v1.0/tjobs/11/exec for executing it)" } )
-    else:
-             return jsonify( { 'result': "No tJobs found for tJobId mentioned in the secJob description" })
+																	
+	return jsonify(zap.core.urls)
 
 if __name__ == '__main__':
 	app.run(host=target, port=por)
