@@ -56,7 +56,7 @@ def get_gui():
 def get_secjobs():
     return jsonify( { 'secjobs': map(make_public_secjob, secjobs) } )
 
-@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['GET'])
 def get_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
