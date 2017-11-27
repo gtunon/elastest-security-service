@@ -1,10 +1,27 @@
+"""
+Author: Avinash Sudhodanan
+Project: ElasTest
+Description: The following code is the API backend of the ElasTest Security Service
+How to run: Download the file and execute "python <filename>" in the commandprompt
+Language: Python 2.7 (supposed to work also for python 3 but not properly tested at the moment)
+"""
 from flask import Flask, jsonify, abort, request, make_response, url_for, render_template
 from flask_httpauth import HTTPBasicAuth
 import subprocess
 import time
+from pprint import pprint
+from zapv2 import ZAPv2
+import os
 
+target = '0.0.0.0' #indicates in which IP address the API listents to
+por = 8000 #indicates the port in
+api_version='r3' #represents the current version of the API
+zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
-auth = HTTPBasicAuth()
+
+auth = HTTPBasicAuth() #for securing api calls using HTTP basic authentication
+
+secjobs=[] #setting empty secjobs list when api starts
 
 @auth.get_password
 def get_password(username):
@@ -25,8 +42,6 @@ def not_found(error):
 def not_found(error):
     return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
-secjobs = [{"id": 1,"name": "secTest1","vulns": [{"vulnType": "Logical","name": "Replay Attack","version": 1}],"tJobId": "1","maxRunTimeInMins": "10"}]
-
 def make_public_secjob(secjob):
     new_secjob = {}
     for field in secjob:
@@ -37,7 +52,7 @@ def make_public_secjob(secjob):
 def get_gui():
     return render_template('ess.html')
 
-@app.route('/ess/api/v0.1/secjobs', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs', methods = ['GET'])
 def get_secjobs():
     return jsonify( { 'secjobs': map(make_public_secjob, secjobs) } )
 
@@ -49,7 +64,7 @@ def get_secjob(secjob_id):
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
 
 
-@app.route('/ess/api/v0.1/secjobs', methods = ['POST'])
+@app.route('/ess/api/'+api_version+'/secjobs', methods = ['POST'])
 def create_secjob():
     if not request.json or not 'name' in request.json:
         abort(400)
@@ -63,7 +78,7 @@ def create_secjob():
     secjobs.append(secjob)
     return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
 
-@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['PUT'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['PUT'])
 def update_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -97,7 +112,7 @@ def update_secjob(secjob_id):
     secjob[0]['vulns'] = request.json.get('vulns', secjob[0]['vulns'])
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
     
-@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>', methods = ['DELETE'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['DELETE'])
 def delete_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -105,7 +120,7 @@ def delete_secjob(secjob_id):
     secjobs.remove(secjob[0])
     return jsonify( { 'result': True } )
 
-@app.route('/ess/api/v0.1/tjobs/<int:tjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec', methods = ['GET'])
 def execute_tjob(tjob_id):
     if tjob_id==1:
         proc = subprocess.Popen("docker run dockernash/tjob-tomato-norm:v1", stdout=subprocess.PIPE, shell=True)
@@ -134,7 +149,7 @@ def execute_tjob(tjob_id):
     else:
         return jsonify( { 'result': "No tJob found with the provided id" })    
 
-@app.route('/ess/api/v0.1/secjobs/<int:secjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
     time.sleep(5)
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
@@ -146,4 +161,4 @@ def execute_secjob(secjob_id):
              return jsonify( { 'result': "No tJobs found for tJobId mentioned in the secJob description" })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+	app.run(host=target, port=por)
