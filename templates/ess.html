@@ -1,6 +1,7 @@
 <!DOCTYPE html>
   <html>
     <head>
+      <title>ElasTest Security Service</title>
       <!--Import Google Icon Font-->
       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
       <!--Import materialize.css-->
@@ -10,8 +11,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <!--Import JQuery-->
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-
-      <title>ElasTest Security Service</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>	
+      
       <script>
 		//Function to send API request with the entered tjob id
 		function addTJobId(){
@@ -21,21 +22,78 @@
 		function changeProgress(element,percentage){
 			$(element).attr("style", "width: "+percentage+"%");
 		}
-	
-		function showReport(){
-			url= addTJobId()
-			$("#div1").load(url, function(responseTxt, statusTxt, xhr){
+		
+		function hideThisShowThat(hide_pan,show_pan){
+			$(hide_pan).attr("class","collapsible-header");
+			$(show_pan).trigger('click');
+		}
+		function showReport(result_location){
+			url= addTJobId();
+			$.get(url, function(responseTxt, statusTxt, xhr){
 			    if(statusTxt == "success")
-				changeProgress(".determinate",100);
+				$(result_location).parent().siblings("div.collection").children().next().next().text(responseTxt);
 			    if(statusTxt == "error")
 				alert("Error: " + xhr.status + ": " + xhr.statusText);
-			});
+			})
+			
 		}
+//Send SecJob
+		function sendSecJob(){
+			url= "/ess/api/r3/secjobs";
+			postbody={id: 0, name: $("#secjobname").val(), vulns:[],tJobId:$("#tjobid").val(),maxRunTimeInMins:10}
+			$.ajax({
+				    type: "POST",
+				    url: url,
+				    // The key needs to match your method's input parameter (case-sensitive).
+				    data: JSON.stringify(postbody),
+				    contentType: "application/json; charset=utf-8",
+				    dataType: "json",
+				    success: function(result){
+						toast("SecJob Created Successfully!",4000);
+						addToSecJobList(result.secjob);
+						
+					      },
+				    failure: function(errMsg) {
+					toast("SecJob Creation Failed! Please check your connection",4000);
+					alert(errMsg);
+				    }
+				});
+	
+		}
+		function addToSecJobList(secjob){
+	
+			
+			retreived_secjob="<li id=\"secjob-individual\" class=\"collection-item avatar\" style=\"display: inherit\;\"><i class=\"material-icons circle\">receipt</i><span id=\"secjobid\" class=\"title\">SecJob Id: "+secjob.id+"</span><p id=\"sejobid\">SecJob Name: "+secjob.name+"<br> Associated TJob Id: "+secjob.tJobId+"</p><a href=\"#!\"class=\"secondary-content\"><i id=\"exe-sjob\" class=\"material-icons\">play_arrow</i><p>Execute</p></a></li>";
+			
+			$("#secjob-collection").append(retreived_secjob);
+			$("#exe-sjob").click(function(){
+			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\">TJob Execution Status<div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"> Analyzing Generated HTTP traffic <div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs <div class=\"result\">[https,http,https]]</div></a></div>"
+			      showSecJobExecStat(this,secjobExecStat);
+			      executeTJob();
+			      showReport(this);
+			  });
+		}
+
+		function showSecJobExecStat(position,exec_stats){
+			
+			
+			$(position).parent().parent().append(exec_stats);
+		}
+		function executeTJob(){
+		}
+		function getInsecUrls(){
+		}
+
 		//Function that triggers upon clicking tjob creation button
 		$(document).ready(function(){
+		  $("#secjob-collection").hide();
 		  $("#create-sjob").click(function(){
-		      showReport()
+		      $("#when-empty").hide();
+		      $("#secjob-collection").show();
+		      sendSecJob();
 		  });
+		
+
 		});
       </script>
     </head>
@@ -43,7 +101,6 @@
       <!--Import jQuery before materialize.js-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js">
       </script>
-	<div id="div1"><h2>Let jQuery AJAX Change This Text</h2></div>
         <!-- LEFT LOGO -->
         <nav>
           <div class="nav-wrapper blue">
@@ -59,7 +116,7 @@
         <div id="home">
           <ul class="collapsible" data-collapsible="accordion">
             <li>
-              <div class="collapsible-header active">
+              <div id="create-sec-job-panel" class="collapsible-header">
                 <i class="material-icons">create</i>Create New SecJob
               </div>
               <div class="collapsible-body">
@@ -76,51 +133,47 @@
                     <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
                     <label class="active" for="secjobdesc">SecJob Description</label>
                   </div>
-                  <a onclick="toast()" id="create-sjob" class="btn">Create</a><div>SecJob Creation Ok!</div>
+                  <a id="create-sjob" class="btn">Create</a>
                 </form>
               </div>
             </li>
-	    <!-- List SecJobs with option to run-->
+	    <!-- List SecJobs with option to execute-->
 	    <li>
               <div class="collapsible-header">
-                <i class="material-icons">playlist_play</i>View & Run SecJobs
+                <i class="material-icons">playlist_play</i>View & Execute SecJobs
               </div>
 
               <div class="collapsible-body">
 	    <!-- List SecJobs -->
+		 <p id="when-empty">No SecJobs found</p>
                  <ul id="secjob-collection" class="collection">
-		    <li id="secjob-individual" class="collection-item avatar" style="display: inherit;">
-		      <i class="material-icons circle">receipt</i>
-		      <span class="title">Title</span>
-		      <p>First Line <br>
-			 Second Line
-		      </p>
-		      <a href="#!" class="secondary-content"><i class="material-icons">play_arrow</i><p>Execute</p></a>
-		    </li>
+		    
 		  </ul>
               </div>
             </li>
 	    <!-- Help menu -->
             <li>
-              <div class="collapsible-header">
+              <div class="collapsible-header active">
                 <i class="material-icons">help</i>Help
               </div>
               <div class="collapsible-body">
-                <span>The ElasTest Security Service can be used to identify insecure cookies of a web application.</span>
+                <span>The ElasTest Security Service can be used to identify insecure URLs and cookies of the web applications involved in a TJob.</span>
+		<p><b>How to use?</b></p>
+		<ul style="list-style-type:circle">
+			<li>1. Go to the "Create New SecJob" section and create a new SecJob by providing the details of a TJob you created at TORM</li>
+			<li>2. After entering the SecJob details, click the "Create" button. The SecJob you created now should be visible in the "View and Execute SecJobs" section</li>
+			<li>3. From the "View & Execute SecJobs" section, click the "Execute" button corresponding to the SecJob you created</li>
+			<li>4. The list of the insecure URLs and cookies should now appear</li>
+		</ul> 
               </div>
             </li>
           </ul>
         </div>
-	
-	<!-- Progress Bar -->
-	<div class="progress">
-	<div class="determinate" style="width: 70%"></div>
-	</div>
         
         <!-- JQuery Operations -->
         <script type="text/javascript">
-          function toast() {
-            Materialize.toast('SecJob Created', 4000, 'rounded')
+          function toast(message,time) {
+            Materialize.toast(message, time, 'rounded')
           }
         </script>
     </body>

@@ -68,13 +68,22 @@ def get_secjob(secjob_id):
 def create_secjob():
     if not request.json or not 'name' in request.json:
         abort(400)
-    secjob = {
-        'id': secjobs[-1]['id'] + 1,
-        'name': request.json['name'],
-        'vulns': request.json['vulns'],
-        'tJobId': request.json['tJobId'],
-        'maxRunTimeInMins': request.json['maxRunTimeInMins']
-    }
+    if len(secjobs)!=0:
+	    secjob = {
+		'id': secjobs[-1]['id'] + 1,
+		'name': request.json['name'],
+		'vulns': request.json['vulns'],
+		'tJobId': request.json['tJobId'],
+		'maxRunTimeInMins': request.json['maxRunTimeInMins']
+	    }
+    else:
+	    secjob = {
+		'id': 1,
+		'name': request.json['name'],
+		'vulns': request.json['vulns'],
+		'tJobId': request.json['tJobId'],
+		'maxRunTimeInMins': request.json['maxRunTimeInMins']
+	    }
     secjobs.append(secjob)
     return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
 
