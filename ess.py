@@ -14,7 +14,7 @@ from zapv2 import ZAPv2
 import os
 
 target = '0.0.0.0' #indicates in which IP address the API listents to
-por = 8000 #indicates the port in
+por = 80 #indicates the port in
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
