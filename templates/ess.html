@@ -30,8 +30,13 @@
 		function showReport(result_location){
 			url= addTJobId();
 			$.get(url, function(responseTxt, statusTxt, xhr){
-			    if(statusTxt == "success")
-				$(result_location).parent().siblings("div.collection").children().next().next().text(responseTxt);
+			    if(statusTxt == "success"){
+				for ( var i = 0, l = responseTxt.length; i < l; i++ ) {
+			            
+				    $(result_location).parent().siblings("div.collection").children().next().next().append("<div id=\"insecureurl\" style=\"color:red;\">"+responseTxt[i]+"</div>");
+				}
+				
+			    }
 			    if(statusTxt == "error")
 				alert("Error: " + xhr.status + ": " + xhr.statusText);
 			})
@@ -67,7 +72,7 @@
 			
 			$("#secjob-collection").append(retreived_secjob);
 			$("#exe-sjob").click(function(){
-			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\">TJob Execution Status<div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"> Analyzing Generated HTTP traffic <div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs <div class=\"result\">[https,http,https]]</div></a></div>"
+			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\">TJob Execution Status<div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"> Analyzing Generated HTTP traffic <div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
 			      showSecJobExecStat(this,secjobExecStat);
 			      executeTJob();
 			      showReport(this);

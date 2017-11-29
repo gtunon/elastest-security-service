@@ -160,8 +160,12 @@ def execute_tjob(tjob_id):
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
-																	
-	return jsonify(zap.core.urls)
+	all_tjob_urls=zap.core.urls
+	insecure_urls=[]
+	for url in all_tjob_urls:
+		if not url.startswith("https"):
+			insecure_urls.append(url)													
+	return jsonify(insecure_urls)
 
 if __name__ == '__main__':
 	app.run(host=target, port=por)
