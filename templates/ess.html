@@ -14,9 +14,10 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>	
       
       <script>
+		api_version="r3";
 		//Function to send API request with the entered tjob id
 		function addTJobId(){
-			return "/ess/api/r3/secjobs/"+$("#tjobid").val()+"/exec";
+			return "/ess/api/"+api_version+"/secjobs/"+$("#tjobid").val()+"/exec";
 		}
 
 		function changeProgress(element,percentage){
@@ -44,7 +45,7 @@
 		}
 //Send SecJob
 		function sendSecJob(){
-			url= "/ess/api/r3/secjobs";
+			url= "/ess/api/"+api_version+"/secjobs";
 			postbody={id: 0, name: $("#secjobname").val(), vulns:[],tJobId:$("#tjobid").val(),maxRunTimeInMins:10}
 			$.ajax({
 				    type: "POST",
@@ -62,9 +63,51 @@
 					toast("SecJob Creation Failed! Please check your connection",4000);
 					alert(errMsg);
 				    }
-				});
+			});
 	
 		}
+
+		function executeTJob(tjobid){
+			url_start_exec= "/ess/api/"+api_version+"/tjobs/"+tjobid.toString()+"/exec";
+			toast("Starting Executing TJob with id: "+tjobid.toString(),4000);
+			start_exec=$.ajax({
+				    type: "GET",
+				    url: url_start_exec,
+				    // The key needs to match your method's input parameter (case-sensitive).  
+				    dataType: "json",
+				    success: function(result){
+						if(result.result=="IN PROGRESS"){
+						toast("TJob Execution IN PROGRESS!",4000);
+						get_exec_progress=$.ajax({
+				    type: "GET",
+				    url: result.getStat_url,
+				    // The key needs to match your method's input parameter (case-sensitive).  
+				    dataType: "json",
+				    success: function(result1){
+						if(result1.result=="EXECUTING TEST"){
+						toast("TJob Execution state is EXECUTING TEST!",4000);
+						}
+						
+					      },
+				    failure: function(errMsg) {
+					toast("TJob Execution Failed",4000);
+					alert(errMsg);
+				    }
+			});
+				console.log(get_exec_progress)
+						}
+						
+					      },
+				    failure: function(errMsg) {
+					toast("TJob Execution Failed",4000);
+					alert(errMsg);
+				    }
+			});
+			
+				
+			
+		}
+
 		function addToSecJobList(secjob){
 	
 			
@@ -74,8 +117,7 @@
 			$("#exe-sjob").click(function(){
 			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\">TJob Execution Status<div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"> Analyzing Generated HTTP traffic <div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
 			      showSecJobExecStat(this,secjobExecStat);
-			      executeTJob();
-			      showReport(this);
+			      executeTJob(secjob.tJobId,this);
 			  });
 		}
 
@@ -84,10 +126,7 @@
 			
 			$(position).parent().parent().append(exec_stats);
 		}
-		function executeTJob(){
-		}
-		function getInsecUrls(){
-		}
+		
 
 		//Function that triggers upon clicking tjob creation button
 		$(document).ready(function(){

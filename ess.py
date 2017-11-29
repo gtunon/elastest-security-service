@@ -12,7 +12,9 @@ import time
 from pprint import pprint
 from zapv2 import ZAPv2
 import os
+import requests
 
+torm_api="localhost:37000"
 target = '0.0.0.0' #indicates in which IP address the API listents to
 por = 80 #indicates the port in
 api_version='r3' #represents the current version of the API
@@ -131,36 +133,15 @@ def delete_secjob(secjob_id):
 
 @app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec', methods = ['GET'])
 def execute_tjob(tjob_id):
-    if tjob_id==1:
-        proc = subprocess.Popen("docker run dockernash/tjob-tomato-norm:v1", stdout=subprocess.PIPE, shell=True)
-    #proc.wait()
-    	(result,err) =proc.communicate()
-    	proc.wait()
-    	print type(result)
-    	print len(result)
-    	if "OK" in result:
-             return jsonify( { 'result': "tJob execution successful" } )
-    	else:
-#TODO detech child process from parent
-             return jsonify( { 'result': "tJob execution successful"})
-    elif tjob_id==11:
-        proc = subprocess.Popen("docker run dockernash/tjob-tomato-mal:v1", stdout=subprocess.PIPE, shell=True)
-        #proc.wait()
-        (result,err) =proc.communicate()
-        proc.wait()
-        print type(result)
-        print len(result)
-        if "OK" in result:
-             return jsonify( { 'result': "tJob execution successful" } )
-        else:
-#TODO detach child process from parent
-             return jsonify( { 'result': "tJob execution successful" } )
-    else:
-        return jsonify( { 'result': "No tJob found with the provided id" })    
+#    response=r = requests.post("http://"+torm_api+"/api/tjob/"+tjob_id+"/exec", json={}, headers={"Accept": "application/json, text/plain, */*","Accept-Encoding" : "gzip, deflate", "Accept-Language":"en-US,en;q=0.5","Connection":"keep-alive","Content-Length":2,"content-type":"application/json","Host":"localhost:37000","Referer":"http://localhost:37000/","User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux) Gecko/20100101 Firefox/57.0"})
+    req=requests.Session()
+    response= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json={})
+    
+    return jsonify( { 'result': str(response.json()["result"]).strip(), 'logIndex':str(response.json()["logIndex"]).strip(),'getStat_url':"http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec/"+str(response.json()["logIndex"]).strip()+"result"})  
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
-	all_tjob_urls=zap.core.urls
+	all_tjob_urls=list(set(zap.core.urls))
 	insecure_urls=[]
 	for url in all_tjob_urls:
 		if not url.startswith("https"):
