@@ -14,7 +14,7 @@ from zapv2 import ZAPv2
 import os
 import requests
 
-torm_api="etm:37006"
+torm_api="etm:8091"
 target = '0.0.0.0' #indicates in which IP address the API listents to
 por = 80 #indicates the port in
 api_version='r3' #represents the current version of the API
