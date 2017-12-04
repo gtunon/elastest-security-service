@@ -16,7 +16,7 @@ import requests
 
 torm_api="etm:8091"
 target = '0.0.0.0' #indicates in which IP address the API listents to
-por = 80 #indicates the port in
+por = 8000 #indicates the port in
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
@@ -53,6 +53,10 @@ def make_public_secjob(secjob):
 @app.route('/', methods = ['GET'])
 def get_gui():
     return render_template('ess.html')
+
+@app.route('/health', methods = ['GET'])
+def get_health():
+    return jsonify( {'status': "up", "context": {}})
 
 @app.route('/ess/api/'+api_version+'/secjobs', methods = ['GET'])
 def get_secjobs():
@@ -133,7 +137,6 @@ def delete_secjob(secjob_id):
 
 @app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec', methods = ['GET'])
 def execute_tjob(tjob_id):
-#    response=r = requests.post("http://"+torm_api+"/api/tjob/"+tjob_id+"/exec", json={}, headers={"Accept": "application/json, text/plain, */*","Accept-Encoding" : "gzip, deflate", "Accept-Language":"en-US,en;q=0.5","Connection":"keep-alive","Content-Length":2,"content-type":"application/json","Host":"localhost:37000","Referer":"http://localhost:37000/","User-Agent":"Mozilla/5.0 (X11; Ubuntu; Linux) Gecko/20100101 Firefox/57.0"})
     req=requests.Session()
     response= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json={})
     

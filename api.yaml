@@ -18,6 +18,23 @@ tags:
 schemes:
 - "https"
 paths:
+  /:
+    get:
+      tags:
+      - "web-gui"
+      summary: "Returns the web gui of ESS."
+      description: "Returns the HTML page of the web GUI of ESS where testers can create new SecJobs, run existing SecJobs and view results."
+      operationId: "getEssGUI"
+      consumes:
+      - "application/json"
+      responses:
+        200:
+          description: "success and returns the html of ESS web gui"
+          examples:
+            text/html: 
+              <html><body>ESS HTML</body></html>
+        404:
+          description: "Resource not found"
   /secjobs:
     get:
       tags:
@@ -232,6 +249,22 @@ paths:
             $ref: "#/definitions/SecJobExecution"
         404:
           description: "secJob Execution not found"
+  /health/:
+    get:
+      tags:
+      - "ESS health check"
+      summary: "Returns the healthcheck status of ESS API." 
+      description: "This API call is implemented to help ESM understand whether the ESS API is running properly."
+      operationId: "getEssHealth"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Health"
+        404:
+          description: "error retrieving health of ESS"
   
 definitions: 
   SecJob:
@@ -312,6 +345,14 @@ definitions:
         - "No"
       httpLog:
         type: "string"
+  
+  Health:
+    type: "object"
+    properties:
+      status:
+        type: "string"
+      context:
+        type: "object"
 externalDocs:
   description: "An elastic platform to ease end to end testing"
   url: "http://elastest.io/" 
