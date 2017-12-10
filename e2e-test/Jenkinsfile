@@ -6,7 +6,7 @@ node('docker') {
       mycontainer.pull()
       mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw -v /dev/shm:/dev/shm") {
          sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
-         git 'https://github.com/elastest/elastest-monitoring-service.git'
+         git 'https://github.com/elastest/elastest-security-service.git'
 
          stage('ElasTest starting'){
             sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock elastest/platform stop" 
@@ -41,9 +41,10 @@ node('docker') {
          }
 
          stage ("E2E tests") {
-	    cd e2e-test
-            python e2etest.py ${elastestURL}"
+	    sh "sudo pip install requests; cd e2e-test ;python e2etest.py ${elastestURL}"
+	    
          }
      }
   }
 }
+
