@@ -293,7 +293,7 @@ def test_run_tjob(tormurl):
 		try:
 			assert "IN PROGRESS" in str(json.loads(r.text)["result"])
 			exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
-			while ("IN PROGRESS" in str(json.loads(exec_resp.text)["result"])) or ("STARTING TSS" in str(json.loads(exec_resp.text)["result"]))  or ("EXECUTING TEST" in str(json.loads(exec_resp.text)["result"])):
+			while ("IN PROGRESS" in str(json.loads(exec_resp.text)["result"])) or ("STARTING TSS" in str(json.loads(exec_resp.text)["result"]))  or ("EXECUTING TEST" in str(json.loads(exec_resp.text)["result"])) or ("WAITING" in str(json.loads(exec_resp.text)["result"])):
 				print "Current status is: "+str(json.loads(exec_resp.text)["result"])
 				exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
 				time.sleep(5)
