@@ -7,6 +7,7 @@ import time
 #function that calls all other tests
 projectId=0
 tjobId=0
+essip=""
 def e2etests():
 	tormurl=sys.argv[1]
 	#To check whether the TORM URL has been read correctly
@@ -15,7 +16,8 @@ def e2etests():
 
 	print "TORM URL is: "+tormurl
 	#To check whether the TORM preloader page can successfully retrieved
-	tests=["test_load_torm_home_preloader(tormurl)","test_load_torm_api_info(tormurl+\"/api/context/services/info\")","test_create_new_project(tormurl+\"/api/project\")","test_create_new_tjob(tormurl+\"/api/tjob\")","test_run_tjob(tormurl)"]	
+	tests=["test_load_torm_home_preloader(tormurl)","test_load_torm_api_info(tormurl+\"/api/context/services/info\")","test_service_launch(tormurl)","test_create_new_project(tormurl+\"/api/project\")","test_create_new_tjob(tormurl+\"/api/tjob\")","test_run_tjob(tormurl)"]	
+	#tests=["test_load_torm_home_preloader(tormurl)","test_load_torm_api_info(tormurl+\"/api/context/services/info\")","test_service_launch(tormurl)"]
 	numtests=len(tests)
 	testssuccess=0
 	testsfailed=0	
@@ -34,6 +36,7 @@ def e2etests():
 			if status=="failed":
 				testsfailed+=1
 				print "Status: Failed"
+				break
 			
 	print "##############"
 	print "_TESTS SUMMARY_"
@@ -42,10 +45,53 @@ def e2etests():
 	print "TOTAL TESTS FAILED: "+str(testsfailed)
 	#status=test_load_torm_api_info(tormurl+"api/context/services/info") 
 
+#Launch ESS service
+def test_service_launch(tormurl):
+		getinstancesurl=tormurl+"api/esm/services/instances"
+		s=requests.Session()
+		r = s.get(getinstancesurl)
+		#print "Running services are"
+		#print(r.text)
+		if r.text=='[]':
+			launchurl=tormurl+"api/esm/services/af7947d9-258b-4dd1-b1ca-17450db25ef7/prov"
+			r1 = s.post(launchurl)
+			#print("ESS launched with id")
+			#print(r1.text)
+			if len(r1.text)!=0:
+				getessipurl=tormurl+"/api/esm/services/instances/"+r1.text
+				print "Instances"
+				r2=s.get(getinstancesurl)
+				instances=json.loads(r2.text)
+				print instances
+				while 0==len(instances):
+					time.sleep(5)
+					r2=s.get(getinstancesurl)
+					instances=json.loads(r2.text)
+					print "Waiting for the launched instance to appear in instances set"
+				while False==instances[0]["serviceReady"]:
+					r2=s.get(getinstancesurl)
+					instances=json.loads(r2.text)
+					time.sleep(5)
+					print "Waiting for service to be ready"
+				if True==instances[0]["serviceReady"]:				
+					r3=s.get(getessipurl)
+					print "The IP address of ESS is"
+					global essip
+					essip=json.loads(r3.text)["serviceIp"]
+					print essip
+					return "success"
+
+			else:	
+				print "Length of instances array returned is 0"
+				return "failed"
+		else:
+			print "Pre-launch issue: Some services are running before launching"
+			return "failed"
+
 def test_load_torm_home_preloader(tormurl):
 		s=requests.Session()
 		r = s.get(tormurl)
-		print(r.text)
+		#print(r.text)
 		try:
 			assert "Loading ElasTest..." in r.text
 		except AssertionError:
@@ -56,7 +102,7 @@ def test_load_torm_home_preloader(tormurl):
 def test_load_torm_api_info(tormapiinfourl):
 		s=requests.Session()
 		r = s.get(tormapiinfourl)
-		print(r.text)
+		#print(r.text)
 		try:
 			assert "elasticSearchUrl" in r.text
 		except AssertionError:
@@ -68,7 +114,7 @@ def test_create_new_project(tormapicreateprojecturl):
 		s=requests.Session()
 		payload={"id": 0,"name": "E2E test ESS"}
 		r = s.post(tormapicreateprojecturl,json=payload)
-		print(r.text)
+		#print(r.text)
 		global projectId
 		projectId=int(json.loads(r.text)["id"])
 		try:
@@ -80,8 +126,8 @@ def test_create_new_project(tormapicreateprojecturl):
 
 def test_create_new_tjob(tormapicreatetjoburl):
 		s=requests.Session()
+		print "ProjectId is"
 		print projectId
-		print type(projectId)
 		payload={
   "id": 0,
   "name": "E2E tjob",
@@ -94,7 +140,7 @@ def test_create_new_tjob(tormapicreatetjoburl):
   },
   "tjobExecs": [],
   "parameters": [],
-  "commands": "python tjob-request.py 172.18.0.12",
+  "commands": "python tjob-request.py "+essip,
   "resultsPath": "",
   "execDashboardConfig": "{\"showComplexMetrics\":true,\"allMetricsFields\":{\"fieldsList\":[{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_cpu_totalUsage\",\"activated\":false,\"type\":\"cpu\",\"subtype\":\"totalUsage\",\"unit\":\"percent\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_memory_usage\",\"activated\":false,\"type\":\"memory\",\"subtype\":\"usage\",\"unit\":\"percent\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_memory_maxUsage\",\"activated\":false,\"type\":\"memory\",\"subtype\":\"maxUsage\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_read_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"read_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_write_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"write_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_total_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"total_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxBytes_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxBytes_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxErrors_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxErrors_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxPackets_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxPackets_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txBytes_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txBytes_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txErrors_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txErrors_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txPackets_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txPackets_ps\",\"unit\":\"amount/sec\"}]},\"allLogsTypes\":{\"logsList\":[{\"component\":\"test\",\"stream\":\"default_log\",\"streamType\":\"log\",\"name\":\"test_default_log_log\",\"activated\":true},{\"component\":\"sut\",\"stream\":\"default_log\",\"streamType\":\"log\",\"name\":\"sut_default_log_log\",\"activated\":true}]}}",
   "execDashboardConfigModel": {
@@ -272,11 +318,12 @@ def test_create_new_tjob(tormapicreatetjoburl):
   ],
   "esmServicesChecked": 0
 }
+		#print(payload)
 		r = s.post(tormapicreatetjoburl,json=payload)
-		print(r.text)
+		#print(r.text)
 		global tjobId
 		tjobId=int(json.loads(r.text)["id"])
-		print tjobId
+		#print tjobId
 		try:
 			assert "E2E tjob" in r.text
 		except AssertionError:
@@ -285,10 +332,11 @@ def test_create_new_tjob(tormapicreatetjoburl):
 		return "success"
 
 def test_run_tjob(tormurl):
+		time.sleep(5)
 		s=requests.Session()
 		payload={"tJobParams": []}
 		r = s.post(tormurl+"api/tjob/"+str(tjobId)+"/exec",json=payload)
-		print(r.text)
+		#print(r.text)
 		
 		try:
 			assert "IN PROGRESS" in str(json.loads(r.text)["result"])
@@ -298,10 +346,10 @@ def test_run_tjob(tormurl):
 				exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
 				time.sleep(5)
 			if "SUCCESS" in str(json.loads(exec_resp.text)["result"]):
-				print exec_resp.text
+				#print exec_resp.text
 				print "TJob execution successful"
 			else:
-				print exec_resp.text
+				#print exec_resp.text
 				print "TJob execution failed"
 				return "failed"
 			
