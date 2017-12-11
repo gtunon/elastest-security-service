@@ -345,9 +345,11 @@ def test_run_tjob(tormurl):
 				print("Current status is: "+str(json.loads(exec_resp.text)["result"]))
 				exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
 				time.sleep(5)
+			print("Exit status is "+str(json.loads(exec_resp.text)["result"]))
 			if "SUCCESS" in str(json.loads(exec_resp.text)["result"]):
 				#print exec_resp.text
 				print("TJob execution successful")
+				return "success"
 			else:
 				#print exec_resp.text
 				print("TJob execution failed")
@@ -356,7 +358,6 @@ def test_run_tjob(tormurl):
 		except AssertionError:
 			print("TJob execution failed")
 			return "failed"
-		return "success"
 		
 if __name__=="__main__":
 	e2etests()	
