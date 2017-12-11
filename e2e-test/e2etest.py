@@ -15,7 +15,7 @@ def e2etests():
 		tormurl=tormurl+'/'	
 
 	print("TORM URL is: "+tormurl)
-	#To check whether the TORM preloader page can successfully retrieved
+	#List of all the tests to be run. Append to this list the new tests
 	tests=["test_load_torm_home_preloader(tormurl)","test_load_torm_api_info(tormurl+\"/api/context/services/info\")","test_service_launch(tormurl)","test_create_new_project(tormurl+\"/api/project\")","test_create_new_tjob(tormurl+\"/api/tjob\")","test_run_tjob(tormurl)"]	
 	#tests=["test_load_torm_home_preloader(tormurl)","test_load_torm_api_info(tormurl+\"/api/context/services/info\")","test_service_launch(tormurl)"]
 	numtests=len(tests)
@@ -23,19 +23,22 @@ def e2etests():
 	testsfailed=0	
 	testsrun=0
 	testsleft=numtests
-
+	#Check if the number of tests is empty
 	if numtests!=0:
+		#Iterate through each test in the list of tests
 		for i in range(len(tests)):
 			testsrun+=1
 			print("~~~~~~~~~~~~~~~")
 			print("Running test "+str(testsrun)+" out of "+str(testsleft))
 			status=eval(tests[i])
+			#Check if the last test executed successfully.
 			if status=="success":
 				testssuccess+=1
 				print("Status: Success")
 			if status=="failed":
 				testsfailed+=1
 				print("Status: Failed")
+				#A failed test will prevent the execution of future tests. This behavior is debatable.
 				break
 			
 	print("##############")
@@ -43,42 +46,43 @@ def e2etests():
 	print("TOTAL TESTS RAN: "+str(testsrun))
 	print("TOTAL TESTS SUCCEEDED: "+str(testssuccess))
 	print("TOTAL TESTS FAILED: "+str(testsfailed))
-	#status=test_load_torm_api_info(tormurl+"api/context/services/info") 
 
 #Launch ESS service
 def test_service_launch(tormurl):
 		getinstancesurl=tormurl+"api/esm/services/instances"
 		s=requests.Session()
 		r = s.get(getinstancesurl)
-		#print "Running services are"
-		#print(r.text)
+		#There should not be any ESS services already launched
 		if r.text=='[]':
 			launchurl=tormurl+"api/esm/services/af7947d9-258b-4dd1-b1ca-17450db25ef7/prov"
+			#Lauch an instance of the ESS service using the id of the ESS service provide by the ESM
 			r1 = s.post(launchurl)
-			#print("ESS launched with id")
-			#print(r1.text)
+			#An empty response body indicates failed launch
 			if len(r1.text)!=0:
 				getessipurl=tormurl+"/api/esm/services/instances/"+r1.text
-				print("Instances")
+				#Check to see if the request to launch ESS was accepted
 				r2=s.get(getinstancesurl)
+				#JSON List of all instance of the services
 				instances=json.loads(r2.text)
-				print(instances)
+				#This loop is to add waiting time for the ESS service to be launched
 				while 0==len(instances):
+					print("Waiting for the launched ESS instance to appear in instances set (load completely)")
 					time.sleep(5)
 					r2=s.get(getinstancesurl)
 					instances=json.loads(r2.text)
-					print("Waiting for the launched instance to appear in instances set")
+				#This loop is to check if the launched service is ready
 				while False==instances[0]["serviceReady"]:
 					r2=s.get(getinstancesurl)
 					instances=json.loads(r2.text)
+					print("Waiting for service to be ready")					
 					time.sleep(5)
-					print("Waiting for service to be ready")
+					
 				if True==instances[0]["serviceReady"]:				
 					r3=s.get(getessipurl)
-					print("The IP address of ESS is")
+					
 					global essip
 					essip=json.loads(r3.text)["serviceIp"]
-					print(essip)
+					print("The IP address of ESS is: "+str(essip))
 					return "success"
 
 			else:	
@@ -87,7 +91,7 @@ def test_service_launch(tormurl):
 		else:
 			print("Pre-launch issue: Some services are running before launching")
 			return "failed"
-
+# Function to check whether the TORM preloader page can successfully retrieved
 def test_load_torm_home_preloader(tormurl):
 		s=requests.Session()
 		r = s.get(tormurl)
@@ -97,8 +101,10 @@ def test_load_torm_home_preloader(tormurl):
 		except AssertionError:
 			print("Test to load TORM home page prealoader failed")
 			return "failed"
+		print("TORM home page loaded successfully")
 		return "success"
 
+# Function to check whether the TORM API is running correctly
 def test_load_torm_api_info(tormapiinfourl):
 		s=requests.Session()
 		r = s.get(tormapiinfourl)
@@ -108,13 +114,14 @@ def test_load_torm_api_info(tormapiinfourl):
 		except AssertionError:
 			print("Call to load elasticSearchUrl failed")
 			return "failed"
+		print("TORM API is correctly accessible")
 		return "success"
-
+# Function to make REST API calls to create a project in TORM
 def test_create_new_project(tormapicreateprojecturl):
 		s=requests.Session()
 		payload={"id": 0,"name": "E2E test ESS"}
 		r = s.post(tormapicreateprojecturl,json=payload)
-		#print(r.text)
+		#Storing value in a global variable so that other functions can read it		
 		global projectId
 		projectId=int(json.loads(r.text)["id"])
 		try:
@@ -122,12 +129,12 @@ def test_create_new_project(tormapicreateprojecturl):
 		except AssertionError:
 			print("New Project creation failed")
 			return "failed"
+		print("Successfully created a test project named "+payload["name"])
 		return "success"
-
+# Create a new tjob as part of a project
 def test_create_new_tjob(tormapicreatetjoburl):
 		s=requests.Session()
-		print("ProjectId is")
-		print(projectId)
+		#This is the standard payload used to create an a tjob using the image dockernash/ess-e2e
 		payload={
   "id": 0,
   "name": "E2E tjob",
@@ -318,9 +325,9 @@ def test_create_new_tjob(tormapicreatetjoburl):
   ],
   "esmServicesChecked": 0
 }
-		#print(payload)
+		
 		r = s.post(tormapicreatetjoburl,json=payload)
-		#print(r.text)
+		#Storing the value of the tjobid in a gloabl variable so that the function to run the tjob can access it
 		global tjobId
 		tjobId=int(json.loads(r.text)["id"])
 		#print tjobId
@@ -329,30 +336,40 @@ def test_create_new_tjob(tormapicreatetjoburl):
 		except AssertionError:
 			print("New TJob creation failed")
 			return "failed"
+		print("Successfully created a tjob with name "+payload["name"])
 		return "success"
-
+# Function to test the running of the tjob
 def test_run_tjob(tormurl):
 		time.sleep(5)
 		s=requests.Session()
+		#Strangely enough, this was the body of the request for running a tjob
 		payload={"tJobParams": []}
 		r = s.post(tormurl+"api/tjob/"+str(tjobId)+"/exec",json=payload)
 		#print(r.text)
 		
 		try:
+			#Check wither the tjob execution is in progress
 			assert "IN PROGRESS" in str(json.loads(r.text)["result"])
 			exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
-			while ("IN PROGRESS" in str(json.loads(exec_resp.text)["result"])) or ("STARTING TSS" in str(json.loads(exec_resp.text)["result"]))  or ("EXECUTING TEST" in str(json.loads(exec_resp.text)["result"])) or ("WAITING" in str(json.loads(exec_resp.text)["result"])):
-				print("Current status is: "+str(json.loads(exec_resp.text)["result"]))
+			#Loop of waits until the tjob has been executed completely. Note to make use the of the maxexectime of tjobs to avoid this wait to be indefinite of the tjob is stuck in a loop
+			while ("FAIL"!=str(json.loads(exec_resp.text)["result"]).strip()) and ("SUCCESS"!=str(json.loads(exec_resp.text)["result"]).strip()):
+				print("TJob execution status is: "+str(json.loads(exec_resp.text)["result"]))
 				exec_resp=s.get(tormurl+"api/tjob/"+str(tjobId)+"/exec/"+str(json.loads(r.text)["id"]))
 				time.sleep(5)
-			print("Exit status is "+str(json.loads(exec_resp.text)["result"]))
+			
+			#The statements to execute if the tjob execution is successful
 			if "SUCCESS" in str(json.loads(exec_resp.text)["result"]):
 				#print exec_resp.text
 				print("TJob execution successful")
 				return "success"
-			else:
+			#The statements to execute if the tjob execution fails
+			elif "FAIL" in str(json.loads(exec_resp.text)["result"]):
 				#print exec_resp.text
 				print("TJob execution failed")
+				return "failed"
+			#The statements to execute if there are some unforseen errors
+			else:
+				print("TJob execution status is neither success nor fail")
 				return "failed"
 			
 		except AssertionError:
