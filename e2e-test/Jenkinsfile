@@ -42,9 +42,7 @@ node('docker') {
 
          stage ("E2E tests") {
 	    sh "pip install requests"
-	    sh "cd e2e-test"
-	    sh "python e2etest.py ${elastestURL}"
-	    
+	    sh "cd e2e-test;python e2etest.py ${elastestURL}
          }
      }
   }
