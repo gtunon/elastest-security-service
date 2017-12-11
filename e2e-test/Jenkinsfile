@@ -41,7 +41,8 @@ node('docker') {
          }
 
          stage ("E2E tests") {
-	    sh "apt-get install python-pip"
+	    sh "ls /usr/local/bin/"
+	    sh "sudo apt-get install python-pip"
 	    sh "/usr/local/bin/pip install requests"
 	    sh "cd e2e-test"
 	    sh "python e2etest.py ${elastestURL}"
