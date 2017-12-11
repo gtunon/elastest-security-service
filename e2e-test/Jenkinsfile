@@ -2,7 +2,7 @@ node('docker') {
 
    stage('Preparation') {
 
-      def mycontainer = docker.image('elastest/ci-docker-e2e:latest')
+      def mycontainer = docker.image('elastest/ci-docker-componse-py-siblings:latest')
       mycontainer.pull()
       mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw -v /dev/shm:/dev/shm") {
          sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
@@ -41,9 +41,7 @@ node('docker') {
          }
 
          stage ("E2E tests") {
-	    sh "ls /usr/local/bin/"
-	    sh "sudo apt-get install python-pip"
-	    sh "/usr/local/bin/pip install requests"
+	    sh "pip install requests"
 	    sh "cd e2e-test"
 	    sh "python e2etest.py ${elastestURL}"
 	    
