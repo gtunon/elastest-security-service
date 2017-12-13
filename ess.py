@@ -13,10 +13,13 @@ from pprint import pprint
 from zapv2 import ZAPv2
 import os
 import requests
+import json
 
-torm_api="etm:8091"
+#torm_api="etm:8091"
+torm_api="localhost:37000"
+tormurl="http://"+torm_api+"/"
 target = '0.0.0.0' #indicates in which IP address the API listents to
-por = 80 #indicates the port in
+por = 8000 #indicates the port in
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
@@ -137,10 +140,26 @@ def delete_secjob(secjob_id):
 
 @app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec', methods = ['GET'])
 def execute_tjob(tjob_id):
-    req=requests.Session()
-    response= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json={})
-    
-    return jsonify( { 'result': str(response.json()["result"]).strip(), 'logIndex':str(response.json()["logIndex"]).strip(),'getStat_url':"http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec/"+str(response.json()["logIndex"]).strip()+"result"})  
+	payload={"tJobParams": []}
+	req=requests.Session()
+	r= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json=payload)
+	#Code copied from ESS e2e test
+	if "IN PROGRESS" in str(json.loads(r.text)["result"]):
+		return jsonify( {'result': "IN PROGRESS","instance":str(json.loads(r.text)["id"])})
+	
+	else:
+		return jsonify( {'result': "FAILED","instance":""})
+
+@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec/<instance>', methods = ['GET'])
+def get_tjob_exec_inst(tjob_id,instance):
+	s=requests.Session()
+	exec_resp=s.get(tormurl+"api/tjob/"+str(tjob_id)+"/exec/"+str(instance))
+	if len(exec_resp.text)!=0:
+		print instance
+		print str(json.loads(exec_resp.text)["result"])
+		return jsonify( {'result': str(json.loads(exec_resp.text)["result"])})
+	else:
+		return jsonify( {'result': "FAILED"})
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
