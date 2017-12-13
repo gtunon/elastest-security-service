@@ -19,15 +19,11 @@
 		function addTJobId(){
 			return "/ess/api/"+api_version+"/secjobs/"+$("#tjobid").val()+"/exec";
 		}
-
+		//Function to update the progress bar of each test
 		function changeProgress(element,percentage){
 			$(element).attr("style", "width: "+percentage+"%");
 		}
-		
-		function hideThisShowThat(hide_pan,show_pan){
-			$(hide_pan).attr("class","collapsible-header");
-			$(show_pan).trigger('click');
-		}
+		//Function that appends each insecure URL to the UI
 		function showReport(result_location){
 			url= addTJobId();
 			$.get(url, function(responseTxt, statusTxt, xhr){
@@ -43,7 +39,7 @@
 			})
 			
 		}
-//Send SecJob
+		//Function that create a secjob by sending the secjob info entered by the tester
 		function sendSecJob(){
 			url= "/ess/api/"+api_version+"/secjobs";
 			postbody={id: 0, name: $("#secjobname").val(), vulns:[],tJobId:$("#tjobid").val(),maxRunTimeInMins:10}
@@ -66,8 +62,11 @@
 			});
 	
 		}
+		//Function to get tjob execution status
+		r="";
 
-		function executeTJob(tjobid){
+		//Function that executes the tjob associated to the secjob under execution
+		function executeTJob(tjobid,elem){
 			url_start_exec= "/ess/api/"+api_version+"/tjobs/"+tjobid.toString()+"/exec";
 			toast("Starting Executing TJob with id: "+tjobid.toString(),4000);
 			start_exec=$.ajax({
@@ -75,26 +74,20 @@
 				    url: url_start_exec,
 				    // The key needs to match your method's input parameter (case-sensitive).  
 				    dataType: "json",
-				    success: function(result){
-						if(result.result=="IN PROGRESS"){
-						toast("TJob Execution IN PROGRESS!",4000);
-						get_exec_progress=$.ajax({
-				    type: "GET",
-				    url: result.getStat_url,
-				    // The key needs to match your method's input parameter (case-sensitive).  
-				    dataType: "json",
-				    success: function(result1){
-						if(result1.result=="EXECUTING TEST"){
-						toast("TJob Execution state is EXECUTING TEST!",4000);
+				    success: function(re){
+						if(re.result=="IN PROGRESS"){
+							toast("TJob Execution IN PROGRESS!",4000);
+							while(r=="")// && r!="SUCCESS" && r!="FAIL" && r!="ERROR")
+							{
+								console.log("in "+r)
+								tjobExecStatus(tjobid,re)
+								
+							}
+							console.log("out "+r)
+							
+							
 						}
-						
-					      },
-				    failure: function(errMsg) {
-					toast("TJob Execution Failed",4000);
-					alert(errMsg);
-				    }
-			});
-				console.log(get_exec_progress)
+						else if(result.result=="FAILED"){
 						}
 						
 					      },
@@ -107,7 +100,26 @@
 				
 			
 		}
-
+		
+		function tjobExecStatus(tjobid,res){
+			
+			get_exec_progress=$.ajax({
+						    type: "GET",
+						    url: "/ess/api/"+api_version+"/tjobs/"+tjobid.toString()+"/exec/"+res.instance,
+						    // The key needs to match your method's input parameter (case-sensitive).  
+						    dataType: "json",
+						    success: function(result1){
+								r=result1.result
+								console.log("far "+r)
+							      },
+						    failure: function(errMsg) {
+							toast("TJob Execution Failed",4000);
+							alert(errMsg);
+							r="ERROR"
+						    }
+						});
+		}
+		//Function that creates the contents of each stage of the secjob execution
 		function addToSecJobList(secjob){
 	
 			
@@ -120,15 +132,14 @@
 			      executeTJob(secjob.tJobId,this);
 			  });
 		}
-
-		function showSecJobExecStat(position,exec_stats){
-			
+		//Function that displays the secjob execution status panel
+		function showSecJobExecStat(position,exec_stats){		
 			
 			$(position).parent().parent().append(exec_stats);
 		}
 		
 
-		//Function that triggers upon clicking tjob creation button
+		//Function that lists the created secjob upon clicking the create button of the secjob
 		$(document).ready(function(){
 		  $("#secjob-collection").hide();
 		  $("#create-sjob").click(function(){
