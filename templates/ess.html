@@ -77,15 +77,7 @@
 				    success: function(re){
 						if(re.result=="IN PROGRESS"){
 							toast("TJob Execution IN PROGRESS!",4000);
-							while(r=="")// && r!="SUCCESS" && r!="FAIL" && r!="ERROR")
-							{
-								console.log("in "+r)
-								tjobExecStatus(tjobid,re)
-								
-							}
-							console.log("out "+r)
-							
-							
+							tjobExecStatus(tjobid,re,elem);
 						}
 						else if(result.result=="FAILED"){
 						}
@@ -101,7 +93,7 @@
 			
 		}
 		
-		function tjobExecStatus(tjobid,res){
+		function tjobExecStatus(tjobid,res,element){
 			
 			get_exec_progress=$.ajax({
 						    type: "GET",
@@ -109,15 +101,39 @@
 						    // The key needs to match your method's input parameter (case-sensitive).  
 						    dataType: "json",
 						    success: function(result1){
-								r=result1.result
-								console.log("far "+r)
-							      },
+								r=result1.result.toString()
+								console.log("out"+r)
+								element.parentNode.nextSibling.nextSibling.firstChild.firstChild.innerHTML="TJob Execution Status: "+"<p style=\"color:blue\">"+r+"</p>"
+								if (r=="STARTING TSS"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 10%");
+								}
+								else if (r=="WAITING TSS"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 20%");
+								}
+								else if (r=="EXECUTING TEST"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 30%");
+								}
+								else if (r=="FAIL"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 100%; background-color: red");
+									return "FAIL"
+									
+								}
+								else if (r=="SUCCESS"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 100%; background-color: green");
+									return "SUCCESS"
+									
+								}
+								//(r!="SUCCESS" && r!="FAIL" && r!="ERROR" && r!="FAILED")
+								//for (i = 0; i < 2; i++){
+									setTimeout(tjobExecStatus(tjobid,res,element), 10000);
+								//}
+							     },
 						    failure: function(errMsg) {
 							toast("TJob Execution Failed",4000);
 							alert(errMsg);
 							r="ERROR"
 						    }
-						});
+						});				
 		}
 		//Function that creates the contents of each stage of the secjob execution
 		function addToSecJobList(secjob){
@@ -127,7 +143,7 @@
 			
 			$("#secjob-collection").append(retreived_secjob);
 			$("#exe-sjob").click(function(){
-			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\">TJob Execution Status<div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"> Analyzing Generated HTTP traffic <div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
+			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">Analyzing Generated HTTP traffic</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
 			      showSecJobExecStat(this,secjobExecStat);
 			      executeTJob(secjob.tJobId,this);
 			  });

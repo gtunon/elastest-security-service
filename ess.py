@@ -15,8 +15,8 @@ import os
 import requests
 import json
 
-#torm_api="etm:8091"
-torm_api="localhost:37000"
+torm_api="etm:8091"
+#torm_api="localhost:37000"
 tormurl="http://"+torm_api+"/"
 target = '0.0.0.0' #indicates in which IP address the API listents to
 por = 8000 #indicates the port in
