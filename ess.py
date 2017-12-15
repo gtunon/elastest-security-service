@@ -14,6 +14,7 @@ from zapv2 import ZAPv2
 import os
 import requests
 import json
+from requests.exceptions import ProxyError
 
 torm_api="etm:8091"
 #torm_api="localhost:37000"
@@ -59,7 +60,11 @@ def get_gui():
 
 @app.route('/health', methods = ['GET'])
 def get_health():
-    return jsonify( {'status': "up", "context": {}})
+	try:
+		urls=zap.core.urls
+		return jsonify( {'status': "up", "context": {"message":"ZAP's Ready"}})
+	except ProxyError:
+		return jsonify( {'status': "down", "context": {"message":"ZAP not Ready"}})
 
 @app.route('/ess/api/'+api_version+'/secjobs', methods = ['GET'])
 def get_secjobs():
@@ -143,10 +148,8 @@ def execute_tjob(tjob_id):
 	payload={"tJobParams": []}
 	req=requests.Session()
 	r= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json=payload)
-	#Code copied from ESS e2e test
 	if "IN PROGRESS" in str(json.loads(r.text)["result"]):
 		return jsonify( {'result': "IN PROGRESS","instance":str(json.loads(r.text)["id"])})
-	
 	else:
 		return jsonify( {'result': "FAILED","instance":""})
 
