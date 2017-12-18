@@ -16,11 +16,12 @@ import requests
 import json
 from requests.exceptions import ProxyError
 
-torm_api="etm:8091"
-#torm_api="localhost:37000"
+#torm_api="etm:8091"
+torm_api="localhost:37000"
 tormurl="http://"+torm_api+"/"
 target = '0.0.0.0' #indicates in which IP address the API listents to
-por = 8000 #indicates the port in
+#por = 8000 #use this port for testing mode
+por = 80 #indicates the port in deployment mode
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
@@ -80,26 +81,31 @@ def get_secjob(secjob_id):
 
 @app.route('/ess/api/'+api_version+'/secjobs', methods = ['POST'])
 def create_secjob():
-    if not request.json or not 'name' in request.json:
-        abort(400)
-    if len(secjobs)!=0:
-	    secjob = {
-		'id': secjobs[-1]['id'] + 1,
-		'name': request.json['name'],
-		'vulns': request.json['vulns'],
-		'tJobId': request.json['tJobId'],
-		'maxRunTimeInMins': request.json['maxRunTimeInMins']
-	    }
-    else:
-	    secjob = {
-		'id': 1,
-		'name': request.json['name'],
-		'vulns': request.json['vulns'],
-		'tJobId': request.json['tJobId'],
-		'maxRunTimeInMins': request.json['maxRunTimeInMins']
-	    }
-    secjobs.append(secjob)
-    return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
+    req=requests.Session()
+    tjob_check=req.get(tormurl+"api/tjob/"+str(request.json['tJobId']))
+    if tjob_check.status_code==200:
+	    if not request.json or not 'name' in request.json:
+		abort(400)
+	    if len(secjobs)!=0:
+		    secjob = {
+			'id': secjobs[-1]['id'] + 1,
+			'name': request.json['name'],
+			'vulns': request.json['vulns'],
+			'tJobId': request.json['tJobId'],
+			'maxRunTimeInMins': request.json['maxRunTimeInMins']
+		    }
+	    else:
+		    secjob = {
+			'id': 1,
+			'name': request.json['name'],
+			'vulns': request.json['vulns'],
+			'tJobId': request.json['tJobId'],
+			'maxRunTimeInMins': request.json['maxRunTimeInMins']
+		    }
+	    secjobs.append(secjob)
+	    return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
+    elif tjob_check.status_code==400:
+		abort(404)
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['PUT'])
 def update_secjob(secjob_id):
@@ -147,11 +153,15 @@ def delete_secjob(secjob_id):
 def execute_tjob(tjob_id):
 	payload={"tJobParams": []}
 	req=requests.Session()
-	r= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json=payload)
-	if "IN PROGRESS" in str(json.loads(r.text)["result"]):
-		return jsonify( {'result': "IN PROGRESS","instance":str(json.loads(r.text)["id"])})
-	else:
-		return jsonify( {'result': "FAILED","instance":""})
+	tjob_check=req.get(tormurl+"api/tjob/"+str(tjob_id))
+	if tjob_check.status_code==200:
+		r= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json=payload)
+		if "IN PROGRESS" in str(json.loads(r.text)["result"]):
+			return jsonify( {'result': "IN PROGRESS","instance":str(json.loads(r.text)["id"])})
+		else:
+			return jsonify( {'result': "FAILED","instance":"", "message":"TJob execution could not start"})
+	elif tjob_check.status_code==400:
+		return jsonify( {'result': "FAILED","instance":"", "message":"No tjob found with the entered tjob id"})
 
 @app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec/<instance>', methods = ['GET'])
 def get_tjob_exec_inst(tjob_id,instance):
