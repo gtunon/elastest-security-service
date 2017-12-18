@@ -55,6 +55,10 @@ def make_public_secjob(secjob):
         new_secjob[field] = secjob[field]
     return new_secjob
 
+@app.route('/gui/', methods = ['GET'])
+def get_gui():
+    return render_template('ess.html')
+
 @app.route('/', methods = ['GET'])
 def get_gui():
     return render_template('ess.html')
