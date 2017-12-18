@@ -56,11 +56,11 @@ def make_public_secjob(secjob):
     return new_secjob
 
 @app.route('/gui/', methods = ['GET'])
-def get_gui():
+def get_webgui():
     return render_template('ess.html')
 
 @app.route('/', methods = ['GET'])
-def get_gui():
+def load_gui():
     return render_template('ess.html')
 
 @app.route('/health', methods = ['GET'])
