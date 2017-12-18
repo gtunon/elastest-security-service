@@ -20,8 +20,7 @@ torm_api="etm:8091"
 #torm_api="localhost:37000"
 tormurl="http://"+torm_api+"/"
 target = '0.0.0.0' #indicates in which IP address the API listents to
-#por = 8000 #use this port for testing mode
-por = 80 #indicates the port in deployment mode
+por = 80 #indicates the port
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")

@@ -87,10 +87,7 @@
 					toast("TJob Execution Failed",4000);
 					alert(errMsg);
 				    }
-			});
-			
-				
-			
+			});	
 		}
 		
 		function tjobExecStatus(tjobid,res,element){
@@ -120,6 +117,7 @@
 								}
 								else if (r=="SUCCESS"){
 									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 100%; background-color: green");
+									showReport(element)
 									return "SUCCESS"
 									
 								}
@@ -146,11 +144,11 @@
 			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">Analyzing Generated HTTP traffic</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
 			      showSecJobExecStat(this,secjobExecStat);
 			      executeTJob(secjob.tJobId,this);
+			      
 			  });
 		}
 		//Function that displays the secjob execution status panel
 		function showSecJobExecStat(position,exec_stats){		
-			
 			$(position).parent().parent().append(exec_stats);
 		}
 		
