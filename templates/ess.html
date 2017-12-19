@@ -115,6 +115,11 @@
 									return "FAIL"
 									
 								}
+								else if (r=="ERROR"){
+									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 100%; background-color: red");
+									return "ERROR"
+									
+								}
 								else if (r=="SUCCESS"){
 									element.parentNode.nextSibling.nextSibling.firstChild.firstChild.nextSibling.firstChild.setAttribute("style","width: 100%; background-color: green");
 									showReport(element)
@@ -141,7 +146,7 @@
 			
 			$("#secjob-collection").append(retreived_secjob);
 			$("#exe-sjob").click(function(){
-			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">Analyzing Generated HTTP traffic</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
+			      secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">HTTP Traffic Analysis Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Insecure URLs </a></div>"
 			      showSecJobExecStat(this,secjobExecStat);
 			      executeTJob(secjob.tJobId,this);
 			      

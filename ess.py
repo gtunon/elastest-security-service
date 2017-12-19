@@ -19,7 +19,7 @@ from requests.exceptions import ProxyError
 torm_api="etm:8091"
 #torm_api="localhost:37000"
 tormurl="http://"+torm_api+"/"
-target = '0.0.0.0' #indicates in which IP address the API listents to
+target = '0.0.0.0' #indicates in which IP address the API listens to
 por = 80 #indicates the port
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
@@ -66,9 +66,9 @@ def load_gui():
 def get_health():
 	try:
 		urls=zap.core.urls
-		return jsonify( {'status': "up", "context": {"message":"ZAP's Ready"}})
+		return jsonify( {'status': "up", "context": {"message":"ZAP is Ready"}})
 	except ProxyError:
-		return jsonify( {'status': "down", "context": {"message":"ZAP not Ready"}})
+		return jsonify( {'status': "down", "context": {"message":"ZAP is not Ready"}})
 
 @app.route('/ess/api/'+api_version+'/secjobs', methods = ['GET'])
 def get_secjobs():
