@@ -39,7 +39,7 @@ def get_password(username):
 def unauthorized():
     return make_response(jsonify( { 'error': 'Unauthorized access' } ), 403)
     # return 403 instead of 401 to prevent browsers from displaying the default auth dialog
-    
+
 @app.errorhandler(400)
 def not_found(error):
     return make_response(jsonify( { 'error': 'Bad request' } ), 400)
@@ -120,16 +120,16 @@ def update_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
         abort(404)
-    
+
     if not request.json:
         abort(400)
     print 'id' in request.json
     if 'id' in request.json and type(request.json['id']) != int:
         abort(400)
-    
+
     if 'maxRunTimeInMins' in request.json and type(request.json['maxRunTimeInMins']) != int:
         abort(400)
-    
+
     if 'name' in request.json and type(request.json['name']) != unicode:
         abort(400)
     if 'tJobId' in request.json and type(request.json['tJobId']) != int:
@@ -142,13 +142,13 @@ def update_secjob(secjob_id):
         abort(400)
     if 'vulnType' in request.json['vulns'] and type(request.json['vulns']['vulnType']) != unicode:
         abort(400)
-    
+
     secjob[0]['maxRunTimeInMins'] = request.json.get('maxRunTimeInMins', secjob[0]['maxRunTimeInMins'])
     secjob[0]['name'] = request.json.get('name', secjob[0]['name'])
     secjob[0]['tJobId'] = request.json.get('maxRunTimeInMins', secjob[0]['maxRunTimeInMins'])
     secjob[0]['vulns'] = request.json.get('vulns', secjob[0]['vulns'])
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
-    
+
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['DELETE'])
 def delete_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
@@ -184,12 +184,50 @@ def get_tjob_exec_inst(tjob_id,instance):
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
 def execute_secjob(secjob_id):
-	all_tjob_urls=list(set(zap.core.urls))
-	insecure_urls=[]
-	for url in all_tjob_urls:
-		if not url.startswith("https"):
-			insecure_urls.append(url)													
-	return jsonify(insecure_urls)
+#Logic for insec URLs
+    all_tjob_urls=list(set(zap.core.urls))
+    insecure_urls=[]
+    insecure_cookies=[]
+    for url in all_tjob_urls:
+    	if not url.startswith("https"):
+    		insecure_urls.append(url)
+#Logic for insec URLs
+    all_tjob_messages=zap.core.messages()
+    urls=[]
+    results=[]
+    resulthttponly={"url":"","inseccookies":[]}
+    cookies=[]
+    insecure_cookies=[]
+    inSecureFlag=None
+    nonHttpOnlyFlag=None
+    nonSameSiteFlag=None
+    for message in all_tjob_messages:
+    	result={"url":"","allcookies":[], "insecurecookies":[], "nonhttponlycookies":[], "nonsamesitecookies":[]}
+    	if message["requestHeader"].split()[1].startswith("https"):
+    		result["url"]=message["requestHeader"].split()[1]
+    		for field in message["responseHeader"].split("\r\n"):
+    			if field.startswith("Set-Cookie"):
+
+    				result["allcookies"].append(field.lstrip("Set-Cookie: ").split(";")[0])
+    				inSecureFlag=False
+    				nonHttpOnlyFlag=False
+    				nonSameSiteFlag=False
+    				for attributes in field.lstrip("Set-Cookie: ").split(";"):
+    					if attributes.strip().lower().startswith("secure"):
+    						inSecureFlag=True
+    					if attributes.strip().lower().startswith("httponly"):
+    						nonHttpOnlyFlag=True
+    					if attributes.strip().lower().startswith("samesite"):
+    						nonSameSiteFlag=True
+    				if inSecureFlag==False:
+    					result["insecurecookies"].append(field.lstrip("Set-Cookie:").strip().split(";")[0])
+    				if nonHttpOnlyFlag==False:
+    					result["nonhttponlycookies"].append(field.lstrip("Set-Cookie:").strip().split(";")[0])
+    				if nonSameSiteFlag==False:
+    					result["nonsamesitecookies"].append(field.lstrip("Set-Cookie:").strip().split(";")[0])
+    	if len(result["insecurecookies"])!=0 or len(result["nonhttponlycookies"])!=0 or len(result["nonsamesitecookies"])!=0:
+    		results.append(result.copy())
+    return jsonify({"insecurls":insecure_urls,"inseccookieinfo":results})
 
 if __name__ == '__main__':
 	app.run(host=target, port=por)
