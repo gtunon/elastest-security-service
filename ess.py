@@ -233,5 +233,22 @@ def execute_secjob(secjob_id):
     		results.append(result.copy())
     return jsonify({"insecurls":insecure_urls,"inseccookieinfo":results})
 
+def isZapReady():
+	zap=ZAPv2()
+	try:
+		urls=zap.core.urls
+		return "Ready"
+	except ProxyError:
+		return "NotReady"
+
 if __name__ == '__main__':
-	app.run(host=target, port=por)
+	sleeps=[10,10,10,10,10]
+	ready=False
+	for slp in sleeps:
+		if isZapReady()=="Ready":
+			ready=True
+			break
+		else:
+			time.sleep(slp)
+	if ready==True:
+		app.run(host=target, port=por)
