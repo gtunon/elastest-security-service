@@ -54,6 +54,10 @@ def make_public_secjob(secjob):
         new_secjob[field] = secjob[field]
     return new_secjob
 
+@app.route('/gui/scripts.js', methods = ['GET'])
+def get_scripts_viagui():
+    return render_template('scripts.js')
+
 @app.route('/scripts.js', methods = ['GET'])
 def get_scripts():
     return render_template('scripts.js')
