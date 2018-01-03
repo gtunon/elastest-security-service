@@ -199,17 +199,18 @@ def execute_secjob(secjob_id):
     all_tjob_messages=zap.core.messages()
     urls=[]
     results=[]
-    resulthttponly={"url":"","inseccookies":[]}
+    resulthttponly={"url":"","method":"","inseccookies":[]}
     cookies=[]
     insecure_cookies=[]
     inSecureFlag=None
     nonHttpOnlyFlag=None
     nonSameSiteFlag=None
     for message in all_tjob_messages:
-    	result={"url":"","allcookies":[], "insecurecookies":[], "nonhttponlycookies":[], "nonsamesitecookies":[]}
+    	result={"url":"","method":"","allcookies":[], "insecurecookies":[], "nonhttponlycookies":[], "nonsamesitecookies":[]}
     	if message["requestHeader"].split()[1].startswith("https"):
-    		result["url"]=message["requestHeader"].split()[1]
-    		for field in message["responseHeader"].split("\r\n"):
+            result["method"]=message["requestHeader"].split()[0]
+            result["url"]=message["requestHeader"].split()[1]
+            for field in message["responseHeader"].split("\r\n"):
     			if field.startswith("Set-Cookie"):
 
     				result["allcookies"].append(field.lstrip("Set-Cookie: ").split(";")[0])

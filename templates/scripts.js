@@ -27,55 +27,94 @@ function showReport(result_location){
       if (responseTxt.inseccookieinfo.length==0) {
 
         $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<div id=\"insecureurl\" style=\"color:green\">"+"None found"+"</div>")
+        $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<div id=\"insecureurl\" style=\"color:green\">"+"None found"+"</div>")
+        $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<div id=\"insecureurl\" style=\"color:green\">"+"None found"+"</div>")
       }
       else {
+
         //Code to add cookies missing secure flag
-        for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
+        var secureFlagTab=false
+
+        for (var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++) {
             if (responseTxt.inseccookieinfo[i].insecurecookies.length==0) {
               continue
             }
             else {
-              $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
-              //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
-              for (var j = 0, m = responseTxt.inseccookieinfo[i].insecurecookies.length;j<m ;j++) {
-                $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].insecurecookies[j]+"</div></div>")
-                //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
-              }
+                  if (secureFlagTab==false){
+                  $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\"><table><thead><tr><th>URL</th><th>Method</th><th>Cookie</th></tr></thead><tbody></tbody></table></div>")
+                  secureFlagTab=true
+                  }
+
+                  //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
+                  for (var j = 0, m = responseTxt.inseccookieinfo[i].insecurecookies.length;j<m ;j++) {
+                    if (j==0) {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td>"+responseTxt.inseccookieinfo[i].url+"</td><td>"+responseTxt.inseccookieinfo[i].method+"</td><td>"+responseTxt.inseccookieinfo[i].insecurecookies[j]+"</td></tr>")
+                    }
+                    else {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td></td><td></td><td>"+responseTxt.inseccookieinfo[i].insecurecookies[j]+"</td></tr>")
+                    }
+                    //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
+                  }
+
             }
         }
 
         //Code to add cookies missing HttpOnly flag
-        for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
-          if (responseTxt.inseccookieinfo[i].nonhttponlycookies.length==0) {
+        var httponlyFlagTab=false
+
+        for (var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++) {
+            if (responseTxt.inseccookieinfo[i].nonhttponlycookies.length==0) {
               continue
-          }
-          else{
-            $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
-            //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
-            for (var j = 0, m = responseTxt.inseccookieinfo[i].nonhttponlycookies.length;j<m ;j++) {
-              $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].nonhttponlycookies[j]+"</div></div>")
-              //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
             }
-          }
+            else {
+                  if (httponlyFlagTab==false){
+                  $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\"><table><thead><tr><th>URL</th><th>Method</th><th>Cookie</th></tr></thead><tbody></tbody></table></div>")
+                  httponlyFlagTab=true
+                  }
+
+
+                  for (var j = 0, m = responseTxt.inseccookieinfo[i].nonhttponlycookies.length;j<m ;j++) {
+                    
+                    if (j==0) {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td>"+responseTxt.inseccookieinfo[i].url+"</td><td>"+responseTxt.inseccookieinfo[i].method+"</td><td>"+responseTxt.inseccookieinfo[i].nonhttponlycookies[j]+"</td></tr>")
+                    }
+                    else {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td></td><td></td><td>"+responseTxt.inseccookieinfo[i].nonhttponlycookies[j]+"</td></tr>")
+                    }
+
+                  }
+
+            }
         }
 
-        //Code to add cookies missing samesite flag
-        for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
+        //Code to add cookies missing SameSite flag
+        var samesiteFlagTab=false
+
+        for (var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++) {
             if (responseTxt.inseccookieinfo[i].nonsamesitecookies.length==0) {
               continue
             }
-            else{
-            $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
-            //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
-              for (var j = 0, m = responseTxt.inseccookieinfo[i].nonsamesitecookies.length;j<m ;j++) {
-                $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].nonsamesitecookies[j]+"</div></div>")
-                //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
-              }
+            else {
+                  if (samesiteFlagTab==false){
+                  $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\"><table><thead><tr><th>URL</th><th>Method</th><th>Cookie</th></tr></thead><tbody></tbody></table></div>")
+                  samesiteFlagTab=true
+                  }
+
+
+                  for (var j = 0, m = responseTxt.inseccookieinfo[i].nonsamesitecookies.length;j<m ;j++) {
+
+                    if (j==0) {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td>"+responseTxt.inseccookieinfo[i].url+"</td><td>"+responseTxt.inseccookieinfo[i].method+"</td><td>"+responseTxt.inseccookieinfo[i].nonsamesitecookies[j]+"</td></tr>")
+                    }
+                    else {
+                      $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td></td><td></td><td>"+responseTxt.inseccookieinfo[i].nonsamesitecookies[j]+"</td></tr>")
+                    }
+
+                  }
+
             }
         }
-
       }
-
     }
     if(statusTxt == "error")
     alert("Error: " + xhr.status + ": " + xhr.statusText);
