@@ -31,32 +31,47 @@ function showReport(result_location){
       else {
         //Code to add cookies missing secure flag
         for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
-            $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
-            //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
-            for (var j = 0, m = responseTxt.inseccookieinfo[i].insecurecookies.length;j<m ;j++) {
-              $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].insecurecookies[j]+"</div></div>")
-              //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
-        }
+            if (responseTxt.inseccookieinfo[i].insecurecookies.length==0) {
+              continue
+            }
+            else {
+              $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
+              //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
+              for (var j = 0, m = responseTxt.inseccookieinfo[i].insecurecookies.length;j<m ;j++) {
+                $(result_location).parent().siblings("div.collection").children().first().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].insecurecookies[j]+"</div></div>")
+                //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
+              }
+            }
         }
 
         //Code to add cookies missing HttpOnly flag
         for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
+          if (responseTxt.inseccookieinfo[i].nonhttponlycookies.length==0) {
+              continue
+          }
+          else{
             $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
             //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
             for (var j = 0, m = responseTxt.inseccookieinfo[i].nonhttponlycookies.length;j<m ;j++) {
               $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].nonhttponlycookies[j]+"</div></div>")
               //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
-        }
+            }
+          }
         }
 
         //Code to add cookies missing samesite flag
         for ( var i = 0, l = responseTxt.inseccookieinfo.length; i < l; i++ ) {
+            if (responseTxt.inseccookieinfo[i].nonsamesitecookies.length==0) {
+              continue
+            }
+            else{
             $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<br><div id=\"inseccookurl\" style=\"color:black\">"+responseTxt.inseccookieinfo[i].url+"</div>")
             //console.log(responseTxt.inseccookieinfo[i].insecurecookies)
-            for (var j = 0, m = responseTxt.inseccookieinfo[i].nonsamesitecookies.length;j<m ;j++) {
-              $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].nonsamesitecookies[j]+"</div></div>")
-              //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
-        }
+              for (var j = 0, m = responseTxt.inseccookieinfo[i].nonsamesitecookies.length;j<m ;j++) {
+                $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().next().append("<div id=\"inseccook\" style=\"color:red\">"+responseTxt.inseccookieinfo[i].nonsamesitecookies[j]+"</div></div>")
+                //console.log(responseTxt.inseccookieinfo[i].insecurecookies[j])
+              }
+            }
         }
 
       }
@@ -171,7 +186,7 @@ function addToSecJobList(secjob){
 
   $("#secjob-collection").append(retreived_secjob);
   $("#exe-sjob").click(function(){
-        secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">HTTP Traffic Analysis Status:</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Connections missing the SSL protection: </a><a href=\"#!\" class=\"collection-item\">Cookies set without the <i>Secure</i> attribute: </a><a href=\"#!\" class=\"collection-item\">Cookies set without the <i>HttpOnly</i> attribute: </a><a href=\"#!\" class=\"collection-item\">Cookies set without the <i>SameSite</i> attribute: </a></div>"
+        secjobExecStat="<h5 align=\"center\">SecJob Execution</h5><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><p id=\"tjobexecstat\">TJob Execution Status</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\"><p id=\"trafficanstat\">HTTP Traffic Analysis Status:</p><div class=\"progress\"><div class=\"determinate\" style=\"width: 0%\"></div></div></a><a href=\"#!\" class=\"collection-item\">Connections without SSL protection: </a><a href=\"#!\" class=\"collection-item\">Cookies set without the <i>Secure</i> attribute: </a><a href=\"#!\" class=\"collection-item\">Cookies set without the <i>HttpOnly</i> attribute: </a><a href=\"#!\" class=\"collection-item\">Cookies without <i>SameSite</i> attribute: </a></div>"
         showSecJobExecStat(this,secjobExecStat);
         executeTJob(secjob.tJobId,this);
 
