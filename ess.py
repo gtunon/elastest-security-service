@@ -71,7 +71,7 @@ def get_webgui():
 def load_gui():
     return render_template('ess.html')
 
-@app.route('/health', methods = ['GET'])
+@app.route('/health/', methods = ['GET'])
 def get_health():
 	try:
 		urls=zap.core.urls
@@ -161,7 +161,7 @@ def delete_secjob(secjob_id):
     secjobs.remove(secjob[0])
     return jsonify( { 'result': True } )
 
-@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec/', methods = ['GET'])
 def execute_tjob(tjob_id):
 	payload={"tJobParams": []}
 	req=requests.Session()
@@ -175,7 +175,7 @@ def execute_tjob(tjob_id):
 	elif tjob_check.status_code==400:
 		return jsonify( {'result': "FAILED","instance":"", "message":"No tjob found with the entered tjob id"})
 
-@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec/<instance>', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/tjobs/<int:tjob_id>/exec/<instance>/', methods = ['GET'])
 def get_tjob_exec_inst(tjob_id,instance):
 	s=requests.Session()
 	exec_resp=s.get(tormurl+"api/tjob/"+str(tjob_id)+"/exec/"+str(instance))
@@ -186,7 +186,7 @@ def get_tjob_exec_inst(tjob_id,instance):
 	else:
 		return jsonify( {'result': "FAILED"})
 
-@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec/', methods = ['GET'])
 def execute_secjob(secjob_id):
 #Logic for insec URLs
     all_tjob_urls=list(set(zap.core.urls))
