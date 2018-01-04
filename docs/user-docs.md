@@ -31,10 +31,10 @@ For analyzing a tJob through ESS, all HTTP communications of the tJob must pass 
 4. After an instance of ESS has been completely launch (meaning the circular spinner that appeared under the _Options_ column of the launched instance stopped spinning), click the icon with the shape of an eye corresponding to the _View Service Detail Option_. From the displayed details, note down the IP address of the running ESS instance which is mentioned corresponding to _URL gui:_. For instance, if the value of _URL gui:_ is http://172.18.0.12:80/gui/, then the IP address of ESS is _172.18.0.12_.
 5. Click on the option _Project_ from the side-panel of TORM and create a new project. 
 6. After creating the project, create a tJob under it with the following values for the corresponding fields 
-+__TJob Name__: Any value,
-+__Select a SuT__: None,
-+__Environment docker image__: _dockernash/sample-ess-tjob_,
-+__Commands__: _python tjob-request.py_ <IP Address of the launched ESS instance>
+>- __TJob Name__: Any value,
+>- __Select a SuT__: None,
+>- __Environment docker image__: dockernash/sample-ess-tjob,
+>- __Commands__: python tjob-request.py _IP Address of the launched ESS instance_
 and click the _SAVE_ button. In the page that appears after clicking the _SAVE_ button, note the id of the newly-created tJob.
 
 ### Analysing a tJob using ESS
