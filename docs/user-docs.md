@@ -34,7 +34,7 @@ For analyzing a tJob through ESS, all HTTP communications of the tJob must pass 
 >- __TJob Name__: Any value,
 >- __Select a SuT__: None,
 >- __Environment docker image__: _dockernash/sample-ess-tjob_,
->- __Commands__: python tjob-request.py <IP Address of the launched ESS instance>
+>- __Commands__: _python tjob-request.py_ __IP Address of the launched ESS instance__
 
 and click the _SAVE_ button. In the page that appears after clicking the _SAVE_ button, note the id of the newly-created tJob.
 
