@@ -5,7 +5,7 @@ The ElasTest Security Service (ESS) is an ElasTest service for identifying secur
 ## Features
 The current version of ESS (v0.5.0) has the following features.
 - A web-based GUI for creating security jobs for detecting security vulnerabilties from tJobs defined within the [ElasTest TORM](https://github.com/elastest/elastest-torm)
-- Detect the insecure http connection involved in tJobs that are not protected with SSL/TLS
+- Detect insecure http connections (that are not protected with [SSL/TLS](https://en.wikipedia.org/wiki/HTTPS)) involved in a tJob execution
 - Detect cookies that can be stolen using [SSL Stripping attacks](https://paladion.net/ssl-stripping-revisiting-http-downgrading-attacks/)
 - Detect cookies that can be stolen using the [Cross-Site Scripting attack](https://en.wikipedia.org/wiki/Cross-site_scripting)
 - Detect cookies that facilitates [Cross-Site Request Forgery attacks](https://en.wikipedia.org/wiki/Cross-site_request_forgery)
