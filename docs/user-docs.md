@@ -23,7 +23,7 @@ ESS can be launched from the ElasTest TORM web-ui. The steps for doing it is as 
 2. Click the icon with the shape of an eye corresponding to the _View Service Detail Option_. From the displayed details, scroll down to see the web-ui of ESS. Alternately, the ESS web-ui can be viewed in another tab by clicking on the link corresponding to the option _URL gui:_. For instance, if the value of _URL gui:_ is http://172.18.0.12:80/gui/, either click this link or load the URL http://172.18.0.12:80/gui/ in a new tab.
 
 ## Basic usage
-###Creating a tJob that proxies through ESS
+### Creating a tJob that proxies through ESS
 For analyzing a tJob through ESS, all HTTP communications of the tJob must pass through the Man-in-the-Middle (MitM in short) proxy service of the ESS. Currently the ESS makes use of the [OWASP ZAP](https://github.com/zaproxy/zaproxy) and [MITM proxy](https://mitmproxy.org/) for this purpose. An example of how to create such a tJob is explained below.
 1. Write a program that makes HTTP connections through an IP address provided as a run-time argument. A proxy server must be listening at this IP address at port 8080. An example of such a script is provided [here](https://github.com/avinash-sudhodanan/sample-ess-tjob/blob/master/tjob-request.py).
 2. Create a docker container with the above mentioned program and the required libraries. Make available this container in a public/private docker repository. For instance, container we created for the program shown [here](https://github.com/avinash-sudhodanan/sample-ess-tjob/blob/master/tjob-request.py) is [hosted at docker hub] (https://hub.docker.com/r/dockernash/sample-ess-tjob/).
@@ -37,7 +37,7 @@ For analyzing a tJob through ESS, all HTTP communications of the tJob must pass 
 +__Commands__: _python tjob-request.py_ <IP Address of the launched ESS instance>
 and click the _SAVE_ button. In the page that appears after clicking the _SAVE_ button, note the id of the newly-created tJob.
 
-###Analysing a tJob using ESS
+### Analysing a tJob using ESS
 To analyse a previously-created tJob using ESS, following the steps below.
 1. Visit the URL of the gui of ESS (see section __How to run__ for details).
 2. Click on the option _Create New SecJob_, provide a desired secJob name, the id of the newly-created tjob, an optional description and click on the _CREATE_ button.
