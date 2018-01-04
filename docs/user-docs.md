@@ -1,6 +1,6 @@
 # ElasTest Security Service (ESS)
 
-The ElasTest Security Service (ESS) is an ElasTest service for identifying security issues in the System Under Test (SuT) by mimicking attacker behavior. ESS creates security tests (that mimics attacker's behavior) from tJobs. These security tests are created by modifying URL parameters, replaying requests [etc](https://pdfs.semanticscholar.org/270c/cf24e8be8421515f5121600f248e841f424d.pdf?_ga=2.125276362.151869347.1515086898-1552517986.1515086898).
+The ElasTest Security Service (ESS) is an ElasTest service for identifying security issues in the System Under Test (SuT) by analyzing the HTTP traffic of the SuT. ESS creates security tests (that mimics attacker's behavior) from the HTTP traffic generated as a result of the tJobs associated to a SuT. These security tests represent malicious attacker behaviors such as modifying URL parameters, replaying requests [and much more](https://pdfs.semanticscholar.org/270c/cf24e8be8421515f5121600f248e841f424d.pdf?_ga=2.125276362.151869347.1515086898-1552517986.1515086898).
 
 ## Features
 The current version of ESS (v0.5.0) has the following features.
