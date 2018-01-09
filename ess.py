@@ -79,11 +79,11 @@ def get_health():
 	except ProxyError:
 		return jsonify( {'status': "down", "context": {"message":"ZAP is not Ready"}})
 
-@app.route('/ess/api/'+api_version+'/secjobs', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs/', methods = ['GET'])
 def get_secjobs():
     return jsonify( { 'secjobs': map(make_public_secjob, secjobs) } )
 
-@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/', methods = ['GET'])
 def get_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -91,7 +91,7 @@ def get_secjob(secjob_id):
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
 
 
-@app.route('/ess/api/'+api_version+'/secjobs', methods = ['POST'])
+@app.route('/ess/api/'+api_version+'/secjobs/', methods = ['POST'])
 def create_secjob():
     req=requests.Session()
     tjob_check=req.get(tormurl+"api/tjob/"+str(request.json['tJobId']))
@@ -119,7 +119,7 @@ def create_secjob():
     elif tjob_check.status_code==400:
 		abort(404)
 
-@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['PUT'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/', methods = ['PUT'])
 def update_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
@@ -153,7 +153,7 @@ def update_secjob(secjob_id):
     secjob[0]['vulns'] = request.json.get('vulns', secjob[0]['vulns'])
     return jsonify( { 'secjob': make_public_secjob(secjob[0]) } )
 
-@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>', methods = ['DELETE'])
+@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/', methods = ['DELETE'])
 def delete_secjob(secjob_id):
     secjob = filter(lambda t: t['id'] == secjob_id, secjobs)
     if len(secjob) == 0:
