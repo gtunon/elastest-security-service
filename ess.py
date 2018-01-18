@@ -96,28 +96,28 @@ def create_secjob():
     req=requests.Session()
     tjob_check=req.get(tormurl+"api/tjob/"+str(request.json['tJobId']))
     if tjob_check.status_code==200:
-	    if not request.json or not 'name' in request.json:
-		abort(400)
-	    if len(secjobs)!=0:
-		    secjob = {
-			'id': secjobs[-1]['id'] + 1,
-			'name': request.json['name'],
-			'vulns': request.json['vulns'],
-			'tJobId': request.json['tJobId'],
-			'maxRunTimeInMins': request.json['maxRunTimeInMins']
-		    }
-	    else:
-		    secjob = {
-			'id': 1,
-			'name': request.json['name'],
-			'vulns': request.json['vulns'],
-			'tJobId': request.json['tJobId'],
-			'maxRunTimeInMins': request.json['maxRunTimeInMins']
-		    }
-	    secjobs.append(secjob)
-	    return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
+        if not request.json or not 'name' in request.json:
+    	       abort(400)
+        if len(secjobs)!=0:
+    	    secjob = {
+    		'id': secjobs[-1]['id'] + 1,
+    		'name': request.json['name'],
+    		'vulns': request.json['vulns'],
+    		'tJobId': request.json['tJobId'],
+    		'maxRunTimeInMins': request.json['maxRunTimeInMins']
+    	    }
+        else:
+    	    secjob = {
+    		'id': 1,
+    		'name': request.json['name'],
+    		'vulns': request.json['vulns'],
+    		'tJobId': request.json['tJobId'],
+    		'maxRunTimeInMins': request.json['maxRunTimeInMins']
+    	    }
+        secjobs.append(secjob)
+        return jsonify( { 'secjob': make_public_secjob(secjob) } ), 201
     elif tjob_check.status_code==400:
-		abort(404)
+        abort(404)
 
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/', methods = ['PUT'])
 def update_secjob(secjob_id):

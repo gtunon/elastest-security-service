@@ -74,7 +74,7 @@ function showReport(result_location){
 
 
                   for (var j = 0, m = responseTxt.inseccookieinfo[i].nonhttponlycookies.length;j<m ;j++) {
-                    
+
                     if (j==0) {
                       $(result_location).parent().siblings("div.collection").children().first().next().next().next().next().children().first().next().next().children().first().children().first().next().append("<tr><td>"+responseTxt.inseccookieinfo[i].url+"</td><td>"+responseTxt.inseccookieinfo[i].method+"</td><td>"+responseTxt.inseccookieinfo[i].nonhttponlycookies[j]+"</td></tr>")
                     }
@@ -122,7 +122,7 @@ function showReport(result_location){
 }
 //Function that create a secjob by sending the secjob info entered by the tester
 function sendSecJob(){
-  url= "/ess/api/"+api_version+"/secjobs";
+  url= "/ess/api/"+api_version+"/secjobs/";
   postbody={id: 0, name: $("#secjobname").val(), vulns:[],tJobId:$("#tjobid").val(),maxRunTimeInMins:10}
   $.ajax({
         type: "POST",
