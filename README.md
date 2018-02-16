@@ -14,7 +14,7 @@ The ElasTest Security Service (ESS) can be used to detect security vulnerabiliti
 2. Denial-of-Service
 3. Improper/Missing authentication
 
-The documentation for using the component is available [here](https://docs.google.com/document/d/1bKEMpXKUAaE0Re7hNxCKY99D6HSuy96cwqZ5rQkEERs/edit?usp=sharing).
+The documentation for using the component is available [here](https://github.com/elastest/elastest-security-service/blob/master/docs/user-docs.md).
 
 What is ElasTest
 -----------------
