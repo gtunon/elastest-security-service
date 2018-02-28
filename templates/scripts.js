@@ -1,3 +1,4 @@
+//ElasTest ESS GUI JavaScript File
 api_version="r3";
 //Function to send API request with the entered tjob id
 function addTJobId(){

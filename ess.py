@@ -16,19 +16,19 @@ import requests
 import json
 from requests.exceptions import ProxyError
 
-torm_api="etm:8091"
-#torm_api="localhost:37000"
-tormurl="http://"+torm_api+"/"
+torm_api="etm:8091" #TORM API URL in production mode
+#torm_api="localhost:37000" #TORM API URL in dev mode
+tormurl="http://"+torm_api+"/" #TORM API full URL
 target = '0.0.0.0' #indicates in which IP address the API listens to
 por = 80 #indicates the port
 api_version='r3' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
-
 auth = HTTPBasicAuth() #for securing api calls using HTTP basic authentication
 
 secjobs=[] #setting empty secjobs list when api starts
 
+#To be used while implementing HTTPBasicAuth
 @auth.get_password
 def get_password(username):
     if username == 'miguel':
@@ -48,6 +48,29 @@ def not_found(error):
 def not_found(error):
     return make_response(jsonify( { 'error': 'Not found' } ), 404)
 
+#method for creating a dummy project
+@app.route('/test/project/', methods = ['GET'])
+def create_dummy_project():
+    req=requests.Session()
+    project_creation_check=req.post(tormurl+"api/project/",json={"id": 0, "name": "UnitTest TJob Project"})
+    if project_creation_check.status_code==200:
+        return jsonify(req.text)
+    else:
+        abort(404)
+
+
+#method for creating a dummy tjob
+@app.route('/test/tjob/', methods = ['GET'])
+def create_dummy_tjob():
+    req=requests.Session()
+    project_creation_check=req.post(tormurl+"api/project/",json={"id": 0, "name": "UnitTest TJob Project"})
+    if project_creation_check.status_code==200:
+        return jsonify(req.text)
+    else:
+        abort(404)
+
+
+#method for creating new secjob
 def make_public_secjob(secjob):
     new_secjob = {}
     for field in secjob:
