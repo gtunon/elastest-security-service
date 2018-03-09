@@ -113,13 +113,6 @@ class TestESS(unittest.TestCase):
         with ess.app.app_context():
             rv = self.app.delete("/ess/api/"+api_version+"/secjobs/"+str(TestESS.secjob_id)+"/")
             self.assertTrue("true" in rv.data)
-
-    def test_execute_secjob(secjob_id):
-        with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
-
 """
 if __name__=="__main__":
     unittest.main()
