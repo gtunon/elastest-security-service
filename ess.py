@@ -54,18 +54,221 @@ def create_dummy_project():
     req=requests.Session()
     project_creation_check=req.post(tormurl+"api/project/",json={"id": 0, "name": "UnitTest TJob Project"})
     if project_creation_check.status_code==200:
-        return jsonify(req.text)
+        return jsonify(project_creation_check.text)
     else:
         abort(404)
 
 
 #method for creating a dummy tjob
-@app.route('/test/tjob/', methods = ['GET'])
-def create_dummy_tjob():
+@app.route('/test/tjb/<int:project_id>/', methods = ['GET'])
+def create_dummy_tjob(project_id):
     req=requests.Session()
-    project_creation_check=req.post(tormurl+"api/project/",json={"id": 0, "name": "UnitTest TJob Project"})
-    if project_creation_check.status_code==200:
-        return jsonify(req.text)
+    rqbody={
+  "id": 0,
+  "name": "ESS UnitTest TJob",
+  "execDashboardConfig": "{\"showAllInOne\":true,\"allMetricsFields\":{\"fieldsList\":[{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_cpu_totalUsage\",\"activated\":false,\"type\":\"cpu\",\"subtype\":\"totalUsage\",\"unit\":\"percent\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_memory_usage\",\"activated\":false,\"type\":\"memory\",\"subtype\":\"usage\",\"unit\":\"percent\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_memory_maxUsage\",\"activated\":false,\"type\":\"memory\",\"subtype\":\"maxUsage\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_read_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"read_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_write_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"write_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_blkio_total_ps\",\"activated\":false,\"type\":\"blkio\",\"subtype\":\"total_ps\",\"unit\":\"bytes\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxBytes_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxBytes_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxErrors_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxErrors_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_rxPackets_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"rxPackets_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txBytes_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txBytes_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txErrors_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txErrors_ps\",\"unit\":\"amount/sec\"},{\"component\":\"\",\"stream\":\"et_dockbeat\",\"streamType\":\"composed_metrics\",\"name\":\"et_dockbeat_net_txPackets_ps\",\"activated\":false,\"type\":\"net\",\"subtype\":\"txPackets_ps\",\"unit\":\"amount/sec\"}]},\"allLogsTypes\":{\"logsList\":[{\"component\":\"test\",\"stream\":\"default_log\",\"streamType\":\"log\",\"name\":\"test_default_log_log\",\"activated\":true},{\"component\":\"sut\",\"stream\":\"default_log\",\"streamType\":\"log\",\"name\":\"sut_default_log_log\",\"activated\":true}]}}",
+  "execDashboardConfigModel": {
+    "showAllInOne": True,
+    "allMetricsFields": {
+      "fieldsList": [
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_cpu_totalUsage",
+          "activated": False,
+          "type": "cpu",
+          "subtype": "totalUsage",
+          "unit": "percent"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_memory_usage",
+          "activated": False,
+          "type": "memory",
+          "subtype": "usage",
+          "unit": "percent"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_memory_maxUsage",
+          "activated": False,
+          "type": "memory",
+          "subtype": "maxUsage",
+          "unit": "bytes"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_blkio_read_ps",
+          "activated": False,
+          "type": "blkio",
+          "subtype": "read_ps",
+          "unit": "bytes"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_blkio_write_ps",
+          "activated": False,
+          "type": "blkio",
+          "subtype": "write_ps",
+          "unit": "bytes"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_blkio_total_ps",
+          "activated": False,
+          "type": "blkio",
+          "subtype": "total_ps",
+          "unit": "bytes"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_rxBytes_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "rxBytes_ps",
+          "unit": "amount/sec"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_rxErrors_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "rxErrors_ps",
+          "unit": "amount/sec"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_rxPackets_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "rxPackets_ps",
+          "unit": "amount/sec"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_txBytes_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "txBytes_ps",
+          "unit": "amount/sec"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_txErrors_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "txErrors_ps",
+          "unit": "amount/sec"
+        },
+        {
+          "component": "",
+          "stream": "et_dockbeat",
+          "streamType": "composed_metrics",
+          "name": "et_dockbeat_net_txPackets_ps",
+          "activated": False,
+          "type": "net",
+          "subtype": "txPackets_ps",
+          "unit": "amount/sec"
+        }
+      ]
+    },
+    "allLogsTypes": {
+      "logsList": [
+        {
+          "component": "test",
+          "stream": "default_log",
+          "streamType": "log",
+          "name": "test_default_log_log",
+          "activated": True
+        },
+        {
+          "component": "sut",
+          "stream": "default_log",
+          "streamType": "log",
+          "name": "sut_default_log_log",
+          "activated": True
+        }
+      ]
+    }
+  },
+  "imageName": "dockernash/test-tjob-ess",
+  "project": {
+    "id": int(project_id),
+    "name": "UnitTest TJob Project",
+    "suts": [],
+    "tjobs": []
+  },
+  "tjobExecs": [],
+  "parameters": [],
+  "commands": "python tjob-request.py",
+  "resultsPath": "",
+  "esmServicesString": "[{\"id\":\"a1920b13-7d11-4ebc-a732-f86a108ea49c\",\"name\":\"EBS\",\"selected\":false,\"config\":{}},{\"id\":\"fe5e0531-b470-441f-9c69-721c2b4875f2\",\"name\":\"EDS\",\"selected\":false,\"config\":{}},{\"id\":\"af7947d9-258b-4dd1-b1ca-17450db25ef7\",\"name\":\"ESS\",\"selected\":false,\"config\":{}},{\"id\":\"29216b91-497c-43b7-a5c4-6613f13fa0e9\",\"name\":\"EUS\",\"selected\":false,\"config\":{\"webRtcStats\":{\"name\":\"webRtcStats\",\"type\":\"boolean\",\"label\":\"Gather WebRTC Statistics\",\"default\":false,\"value\":false}}},{\"id\":\"bab3ae67-8c1d-46ec-a940-94183a443825\",\"name\":\"EMS\",\"selected\":false,\"config\":{}}]",
+  "esmServices": [
+    {
+      "id": "a1920b13-7d11-4ebc-a732-f86a108ea49c",
+      "name": "EBS",
+      "selected": False,
+      "config": {}
+    },
+    {
+      "id": "fe5e0531-b470-441f-9c69-721c2b4875f2",
+      "name": "EDS",
+      "selected": False,
+      "config": {}
+    },
+    {
+      "id": "af7947d9-258b-4dd1-b1ca-17450db25ef7",
+      "name": "ESS",
+      "selected": False,
+      "config": {}
+    },
+    {
+      "id": "29216b91-497c-43b7-a5c4-6613f13fa0e9",
+      "name": "EUS",
+      "selected": False,
+      "config": {
+        "webRtcStats": {
+          "name": "webRtcStats",
+          "type": "boolean",
+          "label": "Gather WebRTC Statistics",
+          "default": False,
+          "value": False
+        }
+      }
+    },
+    {
+      "id": "bab3ae67-8c1d-46ec-a940-94183a443825",
+      "name": "EMS",
+      "selected": False,
+      "config": {}
+    }
+  ],
+  "esmServicesChecked": 0
+}
+    tjob_creation_check=req.post(tormurl+"api/tjob/",json=rqbody)
+    if tjob_creation_check.status_code==200:
+        return jsonify(tjob_creation_check.text)
     else:
         abort(404)
 
@@ -191,6 +394,7 @@ def execute_tjob(tjob_id):
 	tjob_check=req.get(tormurl+"api/tjob/"+str(tjob_id))
 	if tjob_check.status_code==200:
 		r= req.post("http://"+torm_api+"/api/tjob/"+str(tjob_id)+"/exec", json=payload)
+
 		if "IN PROGRESS" in str(json.loads(r.text)["result"]):
 			return jsonify( {'result': "IN PROGRESS","instance":str(json.loads(r.text)["id"])})
 		else:
@@ -212,7 +416,7 @@ def get_tjob_exec_inst(tjob_id,instance):
 @app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec/', methods = ['GET'])
 def execute_secjob(secjob_id):
 #Logic for insec URLs
-    all_tjob_urls=list(set(zap.core.urls))
+    all_tjob_urls=list(set(zap.core.urls()))
     insecure_urls=[]
     insecure_cookies=[]
     for url in all_tjob_urls:
