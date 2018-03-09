@@ -1,9 +1,14 @@
 import unittest
 import ess
-
+import json
+import time
 api_version='r3'
-class TestESS(unittest.TestCase):
 
+class TestESS(unittest.TestCase):
+    project_id=0
+    tjob_id=0
+    secjob_id=0
+    tjob_exec_inst=0
     def setUp(self):
         ess.app.testing = True
         self.app = ess.app.test_client()
@@ -37,7 +42,6 @@ class TestESS(unittest.TestCase):
             rv = self.app.get('/health/')
             self.assertTrue("ZAP is Ready" in rv.data)
 
-
     def test_isZapReady(self):
         with ess.app.app_context():
             self.assertEqual(ess.isZapReady(),'Ready')
@@ -46,45 +50,69 @@ class TestESS(unittest.TestCase):
     def test_create_dummy_project(self):
         with ess.app.app_context():
             rv = self.app.get('/test/project/')
-            print rv.data
-            #self.assertTrue("ElasTest Security Service" in rv.data)
-"""
-    def test_create_secjob(self):
+            project=json.loads(json.loads(rv.data))
+            TestESS.project_id=project["id"]
+            self.assertEqual(project["name"],"UnitTest TJob Project")
+
+    def test_create_dummy_tjob(self):
         with ess.app.app_context():
-            rv = self.app.post('/ess/api/'+api_version+'/secjobs/',data={
-    		'id': 0,
-    		'name': "UnitTest SecJob",
-    		'vulns': [],
-    		'tJobId': "1",
-    		'maxRunTimeInMins': 10
-    	    })
-            print rv.data
+            rv = self.app.get("/test/tjb/"+str(TestESS.project_id)+"/")
+            TestESS.tjob_id=json.loads(json.loads(rv.data))["id"]
+            self.assertEqual(json.loads(json.loads(rv.data))["name"],"ESS UnitTest TJob")
+
+    def test_make_public_secjob(self):
+        with ess.app.app_context():
+            self.assertEqual(ess.make_public_secjob({"id":0,"name":"unittest secjob","vulns":[],"tJobId":TestESS.tjob_id,"maxRunTimeInMins":10}),{"id":0,"name":"unittest secjob","vulns":[],"tJobId":TestESS.tjob_id,"maxRunTimeInMins":10})
             #self.assertTrue("ZAP is Ready" in rv.data)
 
-    def test_get_secjobs():
+
+    def test_create_secjob(self):
+        api_version='r3'
+        with ess.app.app_context():
+            rv = self.app.post('/ess/api/'+api_version+'/secjobs/',data=json.dumps({"id":0,"name":"unittest secjob","vulns":[],"tJobId":TestESS.tjob_id,"maxRunTimeInMins":10}),content_type='application/json')
+            TestESS.secjob_id=json.loads(rv.data)["secjob"]["id"]
+            self.assertTrue("unittest secjob" in rv.data)
+
+    def test_update_secjob(self):
+        api_version='r3'
+        with ess.app.app_context():
+            rv = self.app.put("/ess/api/"+api_version+"/secjobs/"+str(TestESS.secjob_id)+"/",data=json.dumps({"id":int(TestESS.secjob_id),"name":"Unittest secjob","vulns":[],"tJobId":TestESS.tjob_id,"maxRunTimeInMins":10}),content_type='application/json')
+            self.assertTrue("Unittest secjob" in rv.data)
+
+    def test_get_secjobs(self):
         api_version='r3'
         with ess.app.app_context():
             rv = self.app.get('/ess/api/'+api_version+'/secjobs/')
-            #self.assertTrue("ZAP is Ready" in rv.data)
+            self.assertTrue("unittest secjob" in rv.data)
 
-    def test_get_secjob(secjob_id):
+    def test_get_secjob(self):
         with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
+            rv = self.app.get("/ess/api/"+api_version+"/secjobs/"+str(TestESS.secjob_id)+"/")
+            self.assertTrue("unittest secjob" in rv.data)
 
-
-    def test_execute_tjob(tjob_id):
+    def test_execute_tjob(self):
         with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
+            rv = self.app.get('/ess/api/'+api_version+'/tjobs/'+str(TestESS.tjob_id)+'/exec/')
+            TestESS.tjob_exec_inst=json.loads(rv.data)["instance"]
+            self.assertTrue("IN PROGRESS" in rv.data)
 
-    def test_get_tjob_exec_inst(tjob_id,instance):
+    def test_get_tjob_exec_inst(self):
         with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
+            rv = self.app.get('/ess/api/'+api_version+'/tjobs/'+str(TestESS.tjob_id)+'/exec/'+str(TestESS.tjob_exec_inst)+'/')
+            while "IN PROGRESS" in rv.data or "EXECUTING TEST" in rv.data or "WAITING" in rv.data:
+                time.sleep(5)
+                rv = self.app.get('/ess/api/'+api_version+'/tjobs/'+str(TestESS.tjob_id)+'/exec/'+str(TestESS.tjob_exec_inst)+'/')
+            self.assertTrue("SUCCESS" in rv.data)
+
+    def test_execute_secjob(self):
+        with ess.app.app_context():
+            rv = self.app.get('/ess/api/'+api_version+'/secjobs/'+str(TestESS.secjob_id)+'/exec/')
+            self.assertTrue("inseccookieinfo" in rv.data)
+    """
+    def test_delete_secjob(self):
+        with ess.app.app_context():
+            rv = self.app.delete("/ess/api/"+api_version+"/secjobs/"+str(TestESS.secjob_id)+"/")
+            self.assertTrue("true" in rv.data)
 
     def test_execute_secjob(secjob_id):
         with ess.app.app_context():
@@ -92,17 +120,6 @@ class TestESS(unittest.TestCase):
             rv.data
             #self.assertTrue("ZAP is Ready" in rv.data)
 
-    def test_update_secjob(secjob_id):
-        with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
-
-    def test_delete_secjob(secjob_id):
-        with ess.app.app_context():
-            rv = self.app.get('')
-            rv.data
-            #self.assertTrue("ZAP is Ready" in rv.data)
 """
 if __name__=="__main__":
     unittest.main()
