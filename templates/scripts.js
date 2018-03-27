@@ -121,6 +121,167 @@ function showReport(result_location){
     alert("Error: " + xhr.status + ": " + xhr.statusText);
   })
 }
+
+//Function to show scan results
+function showScanResults(){
+  url= "/ess/api/"+api_version+"/zap/getscanresults/";
+  start_exec=$.ajax({
+        type: "GET",
+        url: url,
+        // The key needs to match your method's input parameter (case-sensitive).
+        dataType: "json",
+        success: function(re){
+        if(re.status=="ZAP Exception"){
+          toast("Could not fetch scan report",4000);
+        }
+        else{
+          console.log(re.report);
+        }
+
+        },
+        failure: function(errMsg) {
+          toast("Active Scanning Failed",4000);
+          alert(errMsg);
+        }
+  });
+}
+
+//Function to show status of Active Scan
+var ascan_status="0"
+function showAScanStatus(element){
+  $("#scan-status").val("Started Active Scanner");
+  url= "/ess/api/"+api_version+"/zap/getstatus/ascan/";
+  start_exec=$.ajax({
+        type: "GET",
+        url: url,
+        // The key needs to match your method's input parameter (case-sensitive).
+        dataType: "json",
+        success: function(re){
+        if(re.status=="ZAP Exception"){
+          toast("Active Scanning interrupted",4000);
+        }
+        else{
+          document.getElementById("scan-status").innerHTML="Active Scanning Progress: "+re.status+"%"
+        }
+        ascan_status=re.status
+        },
+        failure: function(errMsg) {
+          toast("Active Scanning Failed",4000);
+          alert(errMsg);
+        }
+  });
+}
+
+//Function to start Active Scanning
+async function startAScan(){
+  url= "/ess/api/"+api_version+"/startascan/";
+  postbody={url: $("#scan-url").val()}
+  $.ajax({
+        type: "POST",
+        url: url,
+        // The key needs to match your method's input parameter (case-sensitive).
+        data: JSON.stringify(postbody),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(re){
+        if(re.status=="Started Active Scanning"){
+          toast("Scan started",4000);
+          showScanStatus($("#start-scan"));
+        }
+        else if(re.status=="ZAP Exception"){
+          toast("Scan could not start due to ZAP Exception");
+        }
+
+            },
+        failure: function(errMsg) {
+      toast("Active Scanning Failed",4000);
+      alert(errMsg);
+        }
+  });
+  while(ascan_status!="100"){
+      showAScanStatus($("#start-scan"));
+      await sleep(2000);
+  }
+  if (ascan_status=="100") {
+      document.getElementById("scan-status").innerHTML="Active Scanning Completed";
+      showScanResults()
+  }
+  else{
+      document.getElementById("scan-status").innerHTML="Errors Occured During Active Scanning";
+  }
+}
+
+//Function to show status of spider scan
+var spider_status="0"
+function showScanStatus(element){
+
+  $("#scan-status").val("Started Spidering")
+  url= "/ess/api/"+api_version+"/zap/getstatus/spider/";
+
+  start_exec=$.ajax({
+        type: "GET",
+        url: url,
+        // The key needs to match your method's input parameter (case-sensitive).
+        dataType: "json",
+        success: function(re){
+        if(re.status=="ZAP Exception"){
+          toast("Spidering interrupted",4000);
+        }
+        else{
+        document.getElementById("scan-status").innerHTML="Spidering Progress: "+re.status+"%"
+        }
+        spider_status=re.status
+        },
+        failure: function(errMsg) {
+      toast("Spidering Failed",4000);
+      alert(errMsg);
+        }
+  });
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+//Function that starts the scan using ZAP
+async function startScan(){
+  url= "/ess/api/"+api_version+"/startspider/";
+  postbody={url: $("#scan-url").val()}
+  $.ajax({
+        type: "POST",
+        url: url,
+        // The key needs to match your method's input parameter (case-sensitive).
+        data: JSON.stringify(postbody),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(re){
+        if(re.status=="Started Spidering"){
+          toast("Scan started",4000);
+          showScanStatus($("#start-scan"));
+        }
+        else if(re.status=="ZAP Exception"){
+          toast("Scan could not start due to ZAP Exception");
+        }
+
+            },
+        failure: function(errMsg) {
+      toast("Spidering Failed",4000);
+      alert(errMsg);
+        }
+  });
+
+  while(spider_status!="100")
+  {
+      showScanStatus($("#start-scan"));
+      await sleep(2000);
+  }
+  if (spider_status=="100") {
+  document.getElementById("scan-status").innerHTML="Spidering Completed";
+  startAScan()
+  }
+  else{
+    document.getElementById("scan-status").innerHTML="Spidering Errors Occured";
+  }
+
+}
 //Function that create a secjob by sending the secjob info entered by the tester
 function sendSecJob(){
   url= "/ess/api/"+api_version+"/secjobs/";
@@ -241,11 +402,16 @@ function showSecJobExecStat(position,exec_stats){
 //Function that lists the created secjob upon clicking the create button of the secjob
 $(document).ready(function(){
   $("#secjob-collection").hide();
+  $("#scan-collection").hide();
   $("#create-sjob").click(function(){
       $("#when-empty").hide();
       $("#secjob-collection").show();
       sendSecJob();
   });
-
+  //Start Scan
+  $("#start-scan").click(function(){
+      $("#scan-collection").show();
+      startScan();
+  });
 
 });

@@ -59,6 +59,7 @@ def create_dummy_project():
         abort(404)
 
 
+
 #method for creating a dummy tjob
 @app.route('/test/tjb/<int:project_id>/', methods = ['GET'])
 def create_dummy_tjob(project_id):
@@ -460,6 +461,54 @@ def execute_secjob(secjob_id):
     	if len(result["insecurecookies"])!=0 or len(result["nonhttponlycookies"])!=0 or len(result["nonsamesitecookies"])!=0:
     		results.append(result.copy())
     return jsonify({"insecurls":insecure_urls,"inseccookieinfo":results})
+
+#Start Sipder Scan with ZAP
+@app.route('/ess/api/'+api_version+'/startspider/', methods = ['POST'])
+def start_spider():
+    scan_url=str(request.json['url'])
+    try:
+        zap.urlopen(scan_url)
+        time.sleep(2)
+        zap.spider.scan(scan_url)
+        return jsonify( { 'status': "Started Spidering" } )
+    except:
+        return jsonify( { 'status': "ZAP Exception" } )
+
+
+#Start Active Scan with ZAP
+@app.route('/ess/api/'+api_version+'/startascan/', methods = ['POST'])
+def start_ascan():
+    scan_url=str(request.json['url'])
+    try:
+        time.sleep(5)
+        zap.ascan.scan(scan_url)
+        return jsonify( { 'status': "Started Active Scanning" } )
+    except:
+        return jsonify( { 'status': "ZAP Exception" } )
+
+#Check spider scan progress of ZAP
+@app.route('/ess/api/'+api_version+'/zap/getstatus/spider/', methods = ['GET'])
+def get_status_spider():
+    try:
+        return jsonify( { 'status': zap.spider.status() } )
+    except:
+        return jsonify( { 'status': "ZAP Exception" } )
+
+#Check active scan progress of ZAP
+@app.route('/ess/api/'+api_version+'/zap/getstatus/ascan/', methods = ['GET'])
+def get_status_ascan():
+    try:
+        return jsonify( { 'status': zap.ascan.status() } )
+    except:
+        return jsonify( { 'status': "ZAP Exception" } )
+
+#Get Active Scan Report from ZAP
+@app.route('/ess/api/'+api_version+'/zap/getscanresults/', methods = ['GET'])
+def get_scan_report():
+    try:
+        return jsonify( { 'status': "Started Active Scanning","report":zap.core.alerts() } )
+    except:
+        return jsonify( { 'status': "ZAP Exception" } )
 
 def isZapReady():
 	zap=ZAPv2()

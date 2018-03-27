@@ -1,97 +1,142 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <title>ElasTest Security Service</title>
-      <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+<html>
 
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <!--Import JQuery-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+<head>
+    <title>ElasTest Security Service</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
 
-      <script src="scripts.js"></script>
-    </head>
-    <body>
-      <!--Import jQuery before materialize.js-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"> </script>
-        <!-- LEFT LOGO -->
-        <nav>
-          <div class="nav-wrapper blue">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Import JQuery-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script src="scripts.js"></script>
+</head>
+
+<body>
+    <!--Import jQuery before materialize.js-->
+
+    <!-- LEFT LOGO -->
+    <nav>
+        <div class="nav-wrapper blue">
             <a href="" class="brand-logo">ElasTest Security Service</a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a class="active" href="#home">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+                <li><a class="active" href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
-          </div>
-        </nav>
-        <!-- SecJob Operations -->
-        <div id="home">
-          <ul class="collapsible" data-collapsible="accordion">
-            <li>
-              <div id="create-sec-job-panel" class="collapsible-header">
-                <i class="material-icons">create</i>Create New SecJob
-              </div>
-              <div class="collapsible-body">
-                <form>
-                  <div class="input-field">
-                    <input type="text" id="secjobname">
-                    <label class="active" for="secjobname">SecJob Name*</label>
-                  </div>
-                  <div class="input-field">
-                    <input type="text" id="tjobid">
-                    <label class="active" for="tjobid">TJob ID*</label>
-                  </div>
-                  <div class="input-field">
-                    <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
-                    <label class="active" for="secjobdesc">SecJob Description</label>
-                  </div>
-                  <a id="create-sjob" class="btn blue">Create</a>
-                </form>
-              </div>
-            </li>
-	    <!-- List SecJobs with option to execute-->
-	    <li>
-              <div class="collapsible-header">
-                <i class="material-icons">playlist_play</i>View & Execute SecJobs
-              </div>
-
-              <div class="collapsible-body">
-	    <!-- List SecJobs -->
-		 <p id="when-empty">No SecJobs found</p>
-                 <ul id="secjob-collection" class="collection">
-
-		  </ul>
-              </div>
-            </li>
-	    <!-- Help menu -->
-            <li>
-              <div class="collapsible-header active">
-                <i class="material-icons">help</i>Help
-              </div>
-              <div class="collapsible-body">
-                <span>The ElasTest Security Service can be used to identify insecure URLs and cookies of the web applications involved in a TJob.</span>
-		<p><b>How to use?</b></p>
-		<ul style="list-style-type:circle">
-			<li>1. Go to the "Create New SecJob" section and create a new SecJob by providing the details of a TJob you created at TORM</li>
-			<li>2. After entering the SecJob details, click the "Create" button. The SecJob you created now should be visible in the "View and Execute SecJobs" section</li>
-			<li>3. From the "View & Execute SecJobs" section, click the "Execute" button corresponding to the SecJob you created</li>
-			<li>4. The list of the insecure URLs and cookies should now appear</li>
-		</ul>
-              </div>
-            </li>
-          </ul>
         </div>
+    </nav>
+    <!-- SecJob Operations -->
+    <div id="home">
+        <ul class="collapsible" data-collapsible="accordion">
+            <li>
+                <div id="create-sec-job-panel" class="collapsible-header">
+                    <i class="material-icons">create</i>Create New SecJob
+                </div>
+                <div class="collapsible-body">
+                    <form>
+                        <div class="input-field">
+                            <input type="text" id="secjobname">
+                            <label class="active" for="secjobname">SecJob Name*</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="text" id="tjobid">
+                            <label class="active" for="tjobid">TJob ID*</label>
+                        </div>
+                        <div class="input-field">
+                            <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
+                            <label class="active" for="secjobdesc">SecJob Description</label>
+                        </div>
+                        <a id="create-sjob" class="btn blue">Create</a>
+                    </form>
+                </div>
+            </li>
+            <!-- List SecJobs with option to execute-->
+            <li>
+                <div class="collapsible-header">
+                    <i class="material-icons">playlist_play</i>View & Execute SecJobs
+                </div>
 
-        <!-- JQuery Operations -->
-        <script type="text/javascript">
-          function toast(message,time) {
+                <div class="collapsible-body">
+                    <!-- List SecJobs -->
+                    <p id="when-empty">No SecJobs found</p>
+                    <ul id="secjob-collection" class="collection">
+
+                    </ul>
+                </div>
+            </li>
+            <!-- Site Scan -->
+            <li>
+                <div class="collapsible-header active">
+                    <i class="material-icons">bug_report</i>Site Scanner
+                </div>
+                <div class="collapsible-body">
+                  <form class="col s12">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <input id="scan-url" type="url" class="validate">
+                        <label for="scan-url">Enter the URL to scan</label>
+                        <a id="start-scan" class="btn blue">Start Scan</a>
+                        <div id="scan-status">
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <ul id="scan-collection" class="collection">
+                    <ul class = "collapsible" data-collapsible = "accordion">
+                     <li>
+                        <div class = "collapsible-header">
+                           <i class = "material-icons">filter_drama</i>First Section</div>
+                        <div class = "collapsible-body"><p>This is first section.</p></div>
+                     </li>
+
+                     <li>
+                        <div class = "collapsible-header">
+                           <i class = "material-icons">place</i>Second Section</div>
+                        <div class = "collapsible-body"><p>This is second section.</p></div>
+                     </li>
+
+                     <li>
+                        <div class = "collapsible-header">
+                           <i class = "material-icons">whatshot</i>Third Section</div>
+                        <div class = "collapsible-body"><p>This is third section.</p></div>
+                     </li>
+                  </ul>
+                  </ul>
+                </div>
+            </li>
+
+
+            <!-- Help menu -->
+            <li>
+                <div class="collapsible-header">
+                    <i class="material-icons">help</i>Help
+                </div>
+                <div class="collapsible-body">
+                    <span>The ElasTest Security Service can be used to identify insecure URLs and cookies of the web applications involved in a TJob.</span>
+                    <p><b>How to use?</b></p>
+                    <ul style="list-style-type:circle">
+                        <li>1. Go to the "Create New SecJob" section and create a new SecJob by providing the details of a TJob you created at TORM</li>
+                        <li>2. After entering the SecJob details, click the "Create" button. The SecJob you created now should be visible in the "View and Execute SecJobs" section</li>
+                        <li>3. From the "View & Execute SecJobs" section, click the "Execute" button corresponding to the SecJob you created</li>
+                        <li>4. The list of the insecure URLs and cookies should now appear</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- JQuery Operations -->
+    <script type="text/javascript">
+        function toast(message,time) {
             Materialize.toast(message, time, 'rounded')
           }
-        </script>
-    </body>
-  </html>
+    </script>
+</body>
+
+</html>
