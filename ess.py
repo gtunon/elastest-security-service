@@ -16,8 +16,8 @@ import requests
 import json
 from requests.exceptions import ProxyError
 
-#torm_api="etm:8091" #TORM API URL in production mode
-torm_api="localhost:37000" #TORM API URL in dev mode
+torm_api="etm:8091" #TORM API URL in production mode
+#torm_api="localhost:37000" #TORM API URL in dev mode
 tormurl="http://"+torm_api+"/" #TORM API full URL
 target = '0.0.0.0' #indicates in which IP address the API listens to
 por = 80 #indicates the port
