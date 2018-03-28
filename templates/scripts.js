@@ -135,7 +135,46 @@ function showScanResults(){
           toast("Could not fetch scan report",4000);
         }
         else{
-          console.log(re.report);
+
+            if (re.report.length!=0) {
+              $("#scan-collection").show();
+
+              for (var i = 1; i <= re.report.length; i++) {
+                if (re.report[i-1]["risk"]=="Low") {
+                  color=""
+                  icon="panorama_fish_eye"
+                }
+
+                else if (re.report[i-1]["risk"]=="Medium") {
+                  color="orange-text"
+                  icon="lens"
+                }
+
+                else if (re.report[i-1]["risk"]=="High") {
+                  color="red-text"
+                  icon="lens"
+                }
+
+                fields=Object.keys(re.report[i-1])
+
+                sub_code2=""
+                for (var j = 0; j < fields.length; j++) {
+                  //if the field is not empty
+                  if (re.report[i-1][fields[j]]!="") {
+                      sub_code2=sub_code2+"<p><b>"+fields[j]+": </b>"+re.report[i-1][fields[j]]+"</p>"
+                  }
+
+
+                }
+                sub_code1="<li><div class = \"collapsible-header\"><i class = \"material-icons "+color+"\">"+icon+"</i>Alert "+i.toString()+"</div><div class = \"collapsible-body\">"
+                sub_code3="</div></li>"
+                $("#result-area").append(sub_code1+sub_code2+sub_code3);
+              }
+            }
+            //No alters not_found
+            else {
+              $("#scan-area").append("<p>No alters found</p>");
+            }
         }
 
         },

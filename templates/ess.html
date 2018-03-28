@@ -75,8 +75,8 @@
                 <div class="collapsible-header active">
                     <i class="material-icons">bug_report</i>Site Scanner
                 </div>
-                <div class="collapsible-body">
-                  <form class="col s12">
+                <div id="scan-area" class="collapsible-body">
+                  <form id="scan-form" class="col s12">
                     <div class="row">
                       <div class="input-field col s12">
                         <input id="scan-url" type="url" class="validate">
@@ -88,25 +88,8 @@
                     </div>
                   </form>
                   <ul id="scan-collection" class="collection">
-                    <ul class = "collapsible" data-collapsible = "accordion">
-                     <li>
-                        <div class = "collapsible-header">
-                           <i class = "material-icons">filter_drama</i>First Section</div>
-                        <div class = "collapsible-body"><p>This is first section.</p></div>
-                     </li>
-
-                     <li>
-                        <div class = "collapsible-header">
-                           <i class = "material-icons">place</i>Second Section</div>
-                        <div class = "collapsible-body"><p>This is second section.</p></div>
-                     </li>
-
-                     <li>
-                        <div class = "collapsible-header">
-                           <i class = "material-icons">whatshot</i>Third Section</div>
-                        <div class = "collapsible-body"><p>This is third section.</p></div>
-                     </li>
-                  </ul>
+                    <ul id="result-area" class = "collapsible" data-collapsible = "accordion">
+                   </ul>
                   </ul>
                 </div>
             </li>
