@@ -106,12 +106,10 @@ def test_zap_active_scan(tormurl,driver):
 		try:
 			element = driver.find_element_by_xpath("/html/body/etm-app/etm-etm/td-layout-nav/div/div/td-layout-manage-list/md-sidenav-container/div[4]/div/div/esm-service-detail/div/div/md-card/md-card-content/div[1]/md-list/div[1]/md-list-item[1]/div/a")
 			driver.get(element.text)
-
-			print("\ta. ESS GUI loaded successfully")
-			time.sleep(10)
+			time.sleep(60)
+			print(driver.page_source)
 			element = driver.find_element_by_id("scan-url")
 			print("\tb. Found form to enter scan url")
-			time.sleep(10)
 			element.send_keys("http://example.com")
 			print("\tc. Entered example.com URL")
 			element = driver.find_element_by_id("start-scan")
