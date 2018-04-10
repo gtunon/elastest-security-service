@@ -28,8 +28,10 @@ def e2etests():
 	#setup Chrome WebDriver
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
-	driver = webdriver.Chrome(chrome_options=options)
+	options.add_argument('--no-sandbox')
+	#driver = webdriver.Chrome(chrome_options=options)
 	#driver = webdriver.Firefox() #for testing with GUI locally
+	driver = webdriver.Chrome(chrome_options=options)
 
 	numtests=len(tests)
 	testssuccess=0
@@ -64,7 +66,7 @@ def e2etests():
 def test_load_torm_homepage(tormurl,driver):
 		driver.get(tormurl)
 		try:
-			element = WebDriverWait(driver, 120).until(
+			element = WebDriverWait(driver, 240).until(
 				EC.presence_of_element_located((By.ID, "nav_support_services"))
 			)
 			print("\ta. TORM home page preloader loaded successfully")
@@ -77,9 +79,8 @@ def test_load_torm_homepage(tormurl,driver):
 #Launch ESS service
 def test_service_launch(tormurl,driver):
 		try:
-			element = driver.find_element_by_id("nav_support_services")
-			element.click()
-			print("\ta. Clicked TSS Tab")
+			driver.get(tormurl+"#/support-services")
+			time.sleep(10)
 			element = driver.find_element_by_class_name("mat-select-trigger")
 			element.click()
 			print("\tb. Clicked TSS Options")
@@ -90,13 +91,12 @@ def test_service_launch(tormurl,driver):
 			element.click()
 			print("\td. Initiated ESS launch")
 			element = WebDriverWait(driver, 540).until(
-		        EC.presence_of_element_located((By.ID, "view_service"))
+		        EC.visibility_of_element_located((By.ID, "view_service"))
 		    )
 			element.click()
 			print("\te. ESS launch successful")
 		except:
 			print("Failed to click Test Support Services Tab because: "+str(sys.exc_info()[0]))
-			print(driver.page_source)
 			return "failed"
 		return "success"
 
@@ -113,7 +113,7 @@ def test_zap_active_scan(tormurl,driver):
 			element.click()
 			print("\tc. Started scanning example.com")
 			element = WebDriverWait(driver, 540).until(
-		        EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/ul/li[3]/div[2]/ul/ul/li[1]/div[1]/i"))
+		        EC.visibility_of_element_located((By.XPATH, "/html/body/div[1]/ul/li[3]/div[2]/ul/ul/li[1]/div[1]/i"))
 		    )
 			print("\td. Scanned example.com and generated report")
 		except:
