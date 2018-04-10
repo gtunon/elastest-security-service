@@ -43,10 +43,7 @@ def e2etests():
 			testsrun+=1
 			print("~~~~~~~~~~~~~~~")
 			print("Running test "+str(testsrun)+" out of "+str(testsleft))
-			try:
-				status=eval(tests[i])
-			finally:
-				print(1)
+			status=eval(tests[i])
 			#Check if the last test executed successfully.
 			if status=="success":
 				testssuccess+=1
@@ -56,7 +53,7 @@ def e2etests():
 				print("Status: Failed")
 				#A failed test will prevent the execution of future tests. This behavior is debatable.
 				break
-
+	driver.close()
 	print("##############")
 	print("_TESTS SUMMARY_")
 	print("TOTAL TESTS RAN: "+str(testsrun))
@@ -98,7 +95,7 @@ def test_service_launch(tormurl,driver):
 			element.click()
 			print("\te. ESS launch successful")
 		except:
-			print("Failed to click Test Support Services Tab")
+			print("Failed to click Test Support Services Tab because: "+str(sys.exc_info()[0]))
 			return "failed"
 		return "success"
 
