@@ -29,6 +29,7 @@ def e2etests():
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
 	options.add_argument('--no-sandbox')
+	options.add_argument("--start-maximized");
 	#driver = webdriver.Chrome(chrome_options=options)
 	#driver = webdriver.Firefox() #for testing with GUI locally
 	driver = webdriver.Chrome(chrome_options=options)
@@ -105,14 +106,17 @@ def test_zap_active_scan(tormurl,driver):
 		try:
 			element = driver.find_element_by_xpath("/html/body/etm-app/etm-etm/td-layout-nav/div/div/td-layout-manage-list/md-sidenav-container/div[4]/div/div/esm-service-detail/div/div/md-card/md-card-content/div[1]/md-list/div[1]/md-list-item[1]/div/a")
 			driver.get(element.text)
+
 			print("\ta. ESS GUI loaded successfully")
 			time.sleep(10)
 			element = driver.find_element_by_id("scan-url")
+			print("\tb. Found form to enter scan url")
+			time.sleep(10)
 			element.send_keys("http://example.com")
-			print("\tb. Entered example.com URL")
+			print("\tc. Entered example.com URL")
 			element = driver.find_element_by_id("start-scan")
 			element.click()
-			print("\tc. Started scanning example.com")
+			print("\td. Started scanning example.com")
 			element = WebDriverWait(driver, 540).until(
 		        EC.visibility_of_element_located((By.XPATH, "/html/body/div[1]/ul/li[3]/div[2]/ul/ul/li[1]/div[1]/i"))
 		    )
