@@ -85,7 +85,7 @@ def test_service_launch(tormurl,driver):
 			element = driver.find_element_by_class_name("mat-select-trigger")
 			element.click()
 			print("\tb. Clicked TSS Options")
-			element = driver.find_element_by_id("md-option-2")
+			element = driver.find_element_by_id("md-option-3")
 			element.click()
 			print("\tc. Selected ESS from options")
 			element = driver.find_element_by_id("create_instance")
