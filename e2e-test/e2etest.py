@@ -25,7 +25,7 @@ def e2etests():
 	#List of all the tests to be run. Append to this list the new tests
 	#tests=["test_load_torm_home_preloader(tormurl,driver)","test_load_torm_home_full(tormurl+\"/api/context/services/info\",driver)","test_service_launch(tormurl,driver)","test_create_new_project(tormurl+\"/api/project\",driver)","test_create_new_tjob(tormurl+\"/api/tjob\")","test_run_tjob(tormurl,driver)"]
 	tests=["test_load_torm_homepage(tormurl,driver)","test_service_launch(tormurl,driver)","test_zap_active_scan(tormurl,driver)"]
-	setup Chrome WebDriver
+	#setup Chrome WebDriver
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
 	driver = webdriver.Chrome(chrome_options=options)
