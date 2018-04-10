@@ -96,6 +96,7 @@ def test_service_launch(tormurl,driver):
 			print("\te. ESS launch successful")
 		except:
 			print("Failed to click Test Support Services Tab because: "+str(sys.exc_info()[0]))
+			print(driver.page_source)
 			return "failed"
 		return "success"
 
