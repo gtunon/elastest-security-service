@@ -117,7 +117,7 @@ def test_zap_active_scan(tormurl,driver):
 		    )
 			print("\td. Scanned example.com and generated report")
 		except:
-			print("Scanning of http://example.com failed")
+			print("Scanning of http://example.com failed because:"+str(sys.exc_info()[0]))
 			return "failed"
 		return "success"
 """
