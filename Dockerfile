@@ -27,7 +27,7 @@ EXPOSE 8080
 RUN chmod +x ./../zap/zap.sh
 
 #Run both ess and ZAP
-CMD ./../zap/zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true & python ess.py &&fg
+CMD ./../zap/zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true & exec python ess.py &&fg
 
 # Run app.py when the container launches
 #CMD ["python", "ess.py"]
