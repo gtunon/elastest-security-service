@@ -87,10 +87,7 @@ def test_service_launch(tormurl,driver):
 			options = driver.find_elements_by_tag_name("md-option")
 			print(options)
 			for option in options:
-				print('***')
-				print(option.get_attribute('innerHTML'))
-				print('***')
-				if option.text=="ESS":
+				if "ESS" in str(option.get_attribute('innerHTML')):
 					option.click()
 					print("\tc. Selected ESS from the list of TSSes")
 			element=driver.find_element_by_id("create_instance")
