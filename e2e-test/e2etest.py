@@ -79,12 +79,14 @@ def test_load_torm_homepage(tormurl,driver):
 def test_service_launch(tormurl,driver):
 		try:
 			driver.get(tormurl+"#/support-services")
-			time.sleep(10)
+			time.sleep(30)
 			print("\ta. Loaded TSS page")
 			element = driver.find_element_by_class_name("mat-select-trigger")
 			element.click()
 			print("\tb. Clicked TSS Options")
 			options = driver.find_elements_by_tag_name("md-option")
+			print(options)
+			print(element.page_source)
 			for option in options:
 				if option.text=="ESS":
 					option.click()
