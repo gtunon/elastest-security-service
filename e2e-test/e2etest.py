@@ -86,8 +86,8 @@ def test_service_launch(tormurl,driver):
 			print("\tb. Clicked TSS Options")
 			options = driver.find_elements_by_tag_name("md-option")
 			print(options)
-			print(element.page_source)
 			for option in options:
+				print(option.text)
 				if option.text=="ESS":
 					option.click()
 					print("\tc. Selected ESS from the list of TSSes")
