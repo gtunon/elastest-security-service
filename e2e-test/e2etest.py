@@ -29,8 +29,6 @@ def e2etests():
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
 	options.add_argument('--no-sandbox')
-	options.add_argument("--start-maximized");
-	#driver = webdriver.Chrome(chrome_options=options)
 	#driver = webdriver.Firefox() #for testing with GUI locally
 	driver = webdriver.Chrome(chrome_options=options)
 
@@ -82,13 +80,16 @@ def test_service_launch(tormurl,driver):
 		try:
 			driver.get(tormurl+"#/support-services")
 			time.sleep(10)
+			print("\ta. Loaded TSS page")
 			element = driver.find_element_by_class_name("mat-select-trigger")
 			element.click()
 			print("\tb. Clicked TSS Options")
-			element = driver.find_element_by_id("md-option-4")
-			element.click()
-			print("\tc. Selected ESS from options")
-			element = driver.find_element_by_id("create_instance")
+			options = driver.find_elements_by_tag_name("md-option")
+			for option in options:
+				if option.text=="ESS":
+					option.click()
+					print("\tc. Selected ESS from the list of TSSes")
+			element=driver.find_element_by_id("create_instance")
 			element.click()
 			print("\td. Initiated ESS launch")
 			element = WebDriverWait(driver, 540).until(
@@ -106,21 +107,19 @@ def test_zap_active_scan(tormurl,driver):
 		try:
 			element = driver.find_element_by_xpath("/html/body/etm-app/etm-etm/td-layout-nav/div/div/td-layout-manage-list/md-sidenav-container/div[4]/div/div/esm-service-detail/div/div/md-card/md-card-content/div[1]/md-list/div[1]/md-list-item[1]/div/a")
 			driver.get(element.text)
-			time.sleep(60)
-			print(driver.page_source)
+			print("\ta. ESS GUI loaded successfully")
 			element = driver.find_element_by_id("scan-url")
-			print("\tb. Found form to enter scan url")
 			element.send_keys("http://example.com")
-			print("\tc. Entered example.com URL")
+			print("\tb. Entered example.com URL")
 			element = driver.find_element_by_id("start-scan")
 			element.click()
-			print("\td. Started scanning example.com")
+			print("\tc. Started scanning example.com")
 			element = WebDriverWait(driver, 540).until(
 		        EC.visibility_of_element_located((By.XPATH, "/html/body/div[1]/ul/li[3]/div[2]/ul/ul/li[1]/div[1]/i"))
 		    )
 			print("\td. Scanned example.com and generated report")
 		except:
-			print("Scanning of http://example.com failed because:"+str(sys.exc_info()[0]))
+			print("Scanning of http://example.com failed")
 			return "failed"
 		return "success"
 """
