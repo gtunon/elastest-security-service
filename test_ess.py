@@ -2,7 +2,8 @@ import unittest
 import ess
 import json
 import time
-api_version='r3'
+
+api_version='r4'
 
 class TestESS(unittest.TestCase):
     project_id=0

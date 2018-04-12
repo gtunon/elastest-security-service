@@ -21,7 +21,7 @@ torm_api="etm:8091" #TORM API URL in production mode
 tormurl="http://"+torm_api+"/" #TORM API full URL
 target = '0.0.0.0' #indicates in which IP address the API listens to
 por = 80 #indicates the port
-api_version='r3' #represents the current version of the API
+api_version='r4' #represents the current version of the API
 zap=ZAPv2() #call to the OWAZP ZAP python API library (https://github.com/zaproxy/zaproxy/wiki/ApiPython)
 app = Flask(__name__, static_url_path = "")
 auth = HTTPBasicAuth() #for securing api calls using HTTP basic authentication

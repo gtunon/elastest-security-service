@@ -44,7 +44,7 @@
                 "api": {
                     "protocol": "http",
                     "port": 80,
-                    "path": "/ess/api/r3"
+                    "path": "/ess/api/r4"
                 },
 		"gui": {
 		    "protocol": "http",
