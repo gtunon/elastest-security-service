@@ -22,10 +22,29 @@ ESS can be launched from the ElasTest TORM web-ui. The steps for doing it is as 
 ### Scanning a web site using ESS
 A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web-GUI. The steps are as follows:
 1. Start TORM and load the Web-GUI of TORM in the Web browser
+![][TORM GUI]
 2. Click on the "Test Support Services" side panel option
+![][Click TSS]
 3. From the drop down list, select "ESS" and click the button "Create Instance"
+![][Launch ESS]
 4. Wait until the ESS instance is completely ready
+![][Load ESS]
 5. Click on the "View Icon" and see the Web-GUI of ESS
+![][ESS GUI]
 6. Enter the URL of the Web site that must be tested using ESS
+![][Enter SUT URL]
 7. Wait until the Spidering and Active Scan completes
+![][ESS Progress]
 8. Check the results generated
+9. ![][ESS Results]
+ 
+[TORM GUI]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[Click TSS]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[Launch ESS]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[Load ESS]: https://drive.google.com/open?id=1MxXydJOlqZ37-CrufUTsCuoYeIsvdqvx
+[ESS GUI]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[Enter SUT URL]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[ESS Progress]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[ESS Results]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+
+
