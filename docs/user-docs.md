@@ -22,21 +22,39 @@ ESS can be launched from the ElasTest TORM web-ui. The steps for doing it is as 
 ### Scanning a web site using ESS
 A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web-GUI. The steps are as follows:
 1. Start TORM and load the Web-GUI of TORM in the Web browser
+
 ![][TORM GUI]
+
 2. Click on the "Test Support Services" side panel option
+
 ![][Click TSS]
+
 3. From the drop down list, select "ESS" and click the button "Create Instance"
+
 ![][Launch ESS]
+
 4. Wait until the ESS instance is completely ready
+
 ![][Load ESS]
-5. Click on the "View Icon" and see the Web-GUI of ESS
+
+5. Click on the "View Service Details" icon
+
 ![][View Details]
+
+6. Scroll down to see the Web-GUI of ESS
+
 ![][ESS GUI]
+
 6. Enter the URL of the Web site that must be tested using ESS
+
 ![][Enter SUT URL]
+
 7. Wait until the Spidering and Active Scan completes
+
 ![][ESS Progress]
+
 8. Check the results generated
+
 ![][ESS Results]
  
 [TORM GUI]: https://pocemon.000webhostapp.com/ESS%20GUI.PNG
