@@ -38,13 +38,13 @@ A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web
 8. Check the results generated
 9. ![][ESS Results]
  
-[TORM GUI]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[Click TSS]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[Launch ESS]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[Load ESS]: https://drive.google.com/open?id=1MxXydJOlqZ37-CrufUTsCuoYeIsvdqvx
-[ESS GUI]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[Enter SUT URL]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[ESS Progress]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
-[ESS Results]: http://elastest.io/images/logos_elastest/elastest-logo-gray-small.png
+[TORM GUI]: https://pocemon.000webhostapp.com/ESS%20GUI.PNG
+[Click TSS]: https://pocemon.000webhostapp.com/Click%20TSS.png
+[Launch ESS]: https://pocemon.000webhostapp.com/Select%20ESS.png
+[Load ESS]: 
+[ESS GUI]: 
+[Enter SUT URL]: https://pocemon.000webhostapp.com/Start%20Scan.png
+[ESS Progress]: https://pocemon.000webhostapp.com/Progress.png
+[ESS Results]: https://pocemon.000webhostapp.com/Result.png
 
 
