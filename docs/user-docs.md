@@ -58,6 +58,7 @@ A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web
 ![][ESS Results]
 
 9. Click on each Alert to see the details
+
 ![][Result Details]
 
 
