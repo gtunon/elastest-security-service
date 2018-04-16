@@ -45,19 +45,19 @@ A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web
 
 ![][ESS GUI]
 
-6. Enter the URL of the Web site that must be tested using ESS
+7. Enter the URL of the Web site that must be tested using ESS
 
 ![][Enter SUT URL]
 
-7. Wait until the Spidering and Active Scan completes
+8. Wait until the Spidering and Active Scan completes
 
 ![][ESS Progress]
 
-8. Check the results generated
+9. Check the results generated
 
 ![][ESS Results]
 
-9. Click on each Alert to see the details
+10. Click on each Alert to see the details
 
 ![][Result Details]
 
