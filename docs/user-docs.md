@@ -30,19 +30,21 @@ A tester can launch ESS from the "Test Support Services" tab of the ElasTest Web
 4. Wait until the ESS instance is completely ready
 ![][Load ESS]
 5. Click on the "View Icon" and see the Web-GUI of ESS
+![][View Details]
 ![][ESS GUI]
 6. Enter the URL of the Web site that must be tested using ESS
 ![][Enter SUT URL]
 7. Wait until the Spidering and Active Scan completes
 ![][ESS Progress]
 8. Check the results generated
-9. ![][ESS Results]
+![][ESS Results]
  
 [TORM GUI]: https://pocemon.000webhostapp.com/ESS%20GUI.PNG
 [Click TSS]: https://pocemon.000webhostapp.com/Click%20TSS.png
 [Launch ESS]: https://pocemon.000webhostapp.com/Select%20ESS.png
-[Load ESS]: 
-[ESS GUI]: 
+[Load ESS]: https://imgur.com/ejDpBn8
+[View Details]: https://imgur.com/9rSYw8F
+[ESS GUI]: https://imgur.com/WYUlN2G
 [Enter SUT URL]: https://pocemon.000webhostapp.com/Start%20Scan.png
 [ESS Progress]: https://pocemon.000webhostapp.com/Progress.png
 [ESS Results]: https://pocemon.000webhostapp.com/Result.png
