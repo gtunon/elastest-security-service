@@ -12,7 +12,7 @@ node('docker') {
 
             stage "Build image - Package"
                 echo ("Building")
-                def myimage = docker.build 'elastest/ess:latest'
+                def myimage = docker.build 'elastest/ess:0.9.0'
 
             stage "Run image"
                 myimage.run()
