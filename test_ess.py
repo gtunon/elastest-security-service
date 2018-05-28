@@ -1,5 +1,4 @@
 import unittest
-import ess
 import json
 import time
 
@@ -11,8 +10,7 @@ class TestESS(unittest.TestCase):
     secjob_id=0
     tjob_exec_inst=0
     def setUp(self):
-        ess.app.testing = True
-        self.app = ess.app.test_client()
+        pass
     """
     def test_get_password(self):
         with ess.app.app_context():
