@@ -12,8 +12,7 @@ USER root
 RUN pip install flask
 
 # Install any needed packages specified in requirements.txt
-RUN pip install flask-httpauth
-RUN pip3 install flask-httpauth
+RUN pip install Flask-HTTPAuth
 
 # Install any needed packages specified in requirements.txt
 RUN pip install requests
