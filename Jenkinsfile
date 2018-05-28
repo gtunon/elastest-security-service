@@ -25,6 +25,14 @@ node('docker') {
                     myimage.push()
                 }
 
-
+	    stage "Cobertura"
+                def codecovArgs = "-v -t $COB_ESS_TOKEN"
+                echo "$codecovArgs"                
+                def exitCode = sh(
+                    returnStatus: true,
+                    script: "curl -s https://codecov.io/bash | bash -s - $codecovArgs")
+                    if (exitCode != 0) {
+                        echo( exitCode +': Failed to upload code coverage to codecov')
+                    }
         }
 }
