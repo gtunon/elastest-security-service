@@ -25,6 +25,8 @@ node('docker') {
                     myimage.push()
                 }
             stage "Unit tests"
+		sh 'pip install Flask-HTTPAuth'
+		sh 'pip install python-owasp-zap-v2.4'
                 sh 'python test_ess.py'
 
         }
