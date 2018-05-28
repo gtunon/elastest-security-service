@@ -13,11 +13,12 @@ class TestESS(unittest.TestCase):
     def setUp(self):
         ess.app.testing = True
         self.app = ess.app.test_client()
+    """
     def test_get_password(self):
         with ess.app.app_context():
             self.assertEqual(ess.get_password('miguel'),'python')
             self.assertEqual(ess.get_password('avinash'),None)
-    """
+    
     def test_get_scripts_gui(self):
         with ess.app.app_context():
             rv = self.app.get('/gui/scripts.js')
