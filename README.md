@@ -1,6 +1,7 @@
 [![License badge](https://img.shields.io/badge/license-Apache2-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Documentation badge](https://img.shields.io/badge/docs-latest-brightgreen.svg)](http://elastest.io/docs/)
 [![Build Status](https://ci.elastest.io/jenkins/buildStatus/icon?job=elastest-security-service/ess)](https://ci.elastest.io/jenkins/job/elastest-security-service/ess)
+[![codecov](https://codecov.io/gh/elastest/elastest-security-service/branch/master/graph/badge.svg)](https://codecov.io/gh/elastest/elastest-security-service)
 
 [![][ElasTest Logo]][ElasTest]
 
