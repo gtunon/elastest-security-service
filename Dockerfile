@@ -13,6 +13,7 @@ RUN pip install flask
 
 # Install any needed packages specified in requirements.txt
 RUN pip install flask-httpauth
+RUN pip install coverage
 
 # Install any needed packages specified in requirements.txt
 RUN pip install requests

@@ -8,7 +8,7 @@ node('docker') {
 
             stage "Tests"
                 echo ("Starting tests")
-		sh 'python test_ess.py'
+		sh 'coverage run test_ess.py'
 
             stage "Build image - Package"
                 echo ("Building")
