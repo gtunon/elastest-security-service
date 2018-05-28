@@ -8,7 +8,7 @@ node('docker') {
 
             stage "Tests"
                 echo ("Starting tests")
-                echo ("(No tests yet)")
+		sh 'python test_ess.py'
 
             stage "Build image - Package"
                 echo ("Building")
@@ -24,8 +24,7 @@ node('docker') {
                     sh 'docker login -u "$USERNAME" -p "$PASSWORD"'
                     myimage.push()
                 }
-            stage "Unit tests"
-                sh 'python test_ess.py'
+
 
         }
 }
