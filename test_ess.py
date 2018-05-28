@@ -17,7 +17,7 @@ class TestESS(unittest.TestCase):
         with ess.app.app_context():
             self.assertEqual(ess.get_password('miguel'),'python')
             self.assertEqual(ess.get_password('avinash'),None)
-
+    """
     def test_get_scripts_gui(self):
         with ess.app.app_context():
             rv = self.app.get('/gui/scripts.js')
@@ -109,11 +109,11 @@ class TestESS(unittest.TestCase):
         with ess.app.app_context():
             rv = self.app.get('/ess/api/'+api_version+'/secjobs/'+str(TestESS.secjob_id)+'/exec/')
             self.assertTrue("inseccookieinfo" in rv.data)
-    """
+
     def test_delete_secjob(self):
         with ess.app.app_context():
             rv = self.app.delete("/ess/api/"+api_version+"/secjobs/"+str(TestESS.secjob_id)+"/")
             self.assertTrue("true" in rv.data)
-"""
+    """
 if __name__=="__main__":
     unittest.main()

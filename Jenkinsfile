@@ -23,6 +23,9 @@ node('docker') {
                     usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                     sh 'docker login -u "$USERNAME" -p "$PASSWORD"'
                     myimage.push()
-                }   
-        }   
+                }
+            stage "Unit tests"
+                sh 'python test_ess.py'
+
+        }
 }
