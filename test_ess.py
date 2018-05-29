@@ -19,12 +19,12 @@ class TestESS(unittest.TestCase):
         with ess.app.app_context():
             self.assertEqual(ess.get_password('miguel'),'python')
             self.assertEqual(ess.get_password('avinash'),None)
-    """
+
     def test_get_scripts_gui(self):
         with ess.app.app_context():
             rv = self.app.get('/gui/scripts.js')
             self.assertTrue("ElasTest ESS GUI JavaScript File" in rv.data)
-
+    """
     def test_get_scripts(self):
         with ess.app.app_context():
             rv = self.app.get('/scripts.js')
