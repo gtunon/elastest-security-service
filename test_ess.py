@@ -11,13 +11,15 @@ class TestESS(unittest.TestCase):
     secjob_id=0
     tjob_exec_inst=0
     def setUp(self):
-        pass
-    """
+        with ess.app.app_context():
+            self.assertEqual(ess.get_password('miguel'),'python')
+            self.assertEqual(ess.get_password('avinash'),None)
+
     def test_get_password(self):
         with ess.app.app_context():
             self.assertEqual(ess.get_password('miguel'),'python')
             self.assertEqual(ess.get_password('avinash'),None)
-    
+    """
     def test_get_scripts_gui(self):
         with ess.app.app_context():
             rv = self.app.get('/gui/scripts.js')
