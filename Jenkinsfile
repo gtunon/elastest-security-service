@@ -7,10 +7,10 @@ node('docker') {
             git 'https://github.com/elastest/elastest-security-service'
 
 	     stage "prepare tests"
-     		pip install flask
-		pip install flask-httpauth
-		pip install coverage
-		pip install python-owasp-zap-v2.4
+     		sh 'pip install flask'
+		sh 'pip install flask-httpauth'
+		sh 'pip install coverage'
+		sh 'pip install python-owasp-zap-v2.4'
 
             stage "Tests"
                 echo ("Starting tests")
