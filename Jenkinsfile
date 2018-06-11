@@ -6,16 +6,7 @@ node('docker') {
         mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw") {
             git 'https://github.com/elastest/elastest-security-service'
 
-	     stage "prepare tests"
-     		sh 'pip install flask'
-		sh 'pip install flask-httpauth'
-		sh 'pip install coverage'
-		sh 'pip install python-owasp-zap-v2.4'
-
-            stage "Tests"
-                echo ("Starting tests")
-		sh 'coverage run test_ess.py'
-
+	     
             stage "Build image - Package"
                 echo ("Building")
                 def myimage = docker.build 'elastest/ess:latest'
