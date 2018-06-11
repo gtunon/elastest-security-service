@@ -7,13 +7,17 @@
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
-
+    <!--To get rid of the annoying firefox warning-->
+    <meta charset="utf-8"/>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!--Import JQuery-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js">
+
+    </script>
     <script src="scripts.js"></script>
 </head>
 
@@ -24,94 +28,49 @@
     <nav>
         <div class="nav-wrapper grey darken-1">
             <a href="" class="brand-logo">ElasTest Security Service</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class="active" href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
         </div>
     </nav>
-    <!-- SecJob Operations -->
-    <div id="home">
-        <ul class="collapsible" data-collapsible="accordion">
-            <li>
-                <div id="create-sec-job-panel" class="collapsible-header">
-                    <i class="material-icons">create</i>Create New SecJob
-                </div>
-                <div class="collapsible-body">
-                    <form>
-                        <div class="input-field">
-                            <input type="text" id="secjobname">
-                            <label class="active" for="secjobname">SecJob Name*</label>
-                        </div>
-                        <div class="input-field">
-                            <input type="text" id="tjobid">
-                            <label class="active" for="tjobid">TJob ID*</label>
-                        </div>
-                        <div class="input-field">
-                            <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
-                            <label class="active" for="secjobdesc">SecJob Description</label>
-                        </div>
-                        <a id="create-sjob" class="btn orange lighten-1">Create</a>
-                    </form>
-                </div>
-            </li>
-            <!-- List SecJobs with option to execute-->
-            <li>
-                <div class="collapsible-header">
-                    <i class="material-icons">playlist_play</i>View & Execute SecJobs
-                </div>
+    <!-- Scan Operations -->
+    <div id="main">
 
-                <div class="collapsible-body">
-                    <!-- List SecJobs -->
-                    <p id="when-empty">No SecJobs found</p>
-                    <ul id="secjob-collection" class="collection">
+      <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <!-- Show Details of the TJob execution and security scan -->
+            <div class="collapsible-header active"><i class="material-icons">assessment</i>Scan Progress & Report</div>
+            <!-- Show TJob Execution Progress -->
+            <div class="collapsible-body"><p id="current_exec_stat">Awaiting API calls from the TJob...</p>
+              <div class="progress grey">
+                <div id="tjex-prog" class="indeterminate orange lighten-1"></div>
+              </div>
+            </div>
+            <!-- List domains -->
+            <div id="list-domains" class="collapsible-body">
+              <div id="domains-follow">
+              </div>
+              <a id="start-scan-btn" class="waves-effect waves-light orange lighten-1 btn">Start Scan</a>
+              <a id="stop-scan-btn" class="waves-effect waves-light orange lighten-1 btn">Stop Scan</a>
+            </div>
+            <!-- Display Security Issues -->
+            <div id="list-alerts" class="collapsible-body">
+              <p>Security issues of the SuT (if any) will appear below</p>
+            </div>
+          </li>
 
-                    </ul>
-                </div>
-            </li>
-            <!-- Site Scan -->
-            <li>
-                <div class="collapsible-header active">
-                    <i class="material-icons">bug_report</i>Site Scanner
-                </div>
-                <div id="scan-area" class="collapsible-body">
-                  <form id="scan-form" class="col s12">
-                    <div class="row">
-                      <div class="input-field col s12">
-                        <input id="scan-url" type="url" class="validate">
-                        <label for="scan-url">Enter the URL to scan</label>
-                        <a id="start-scan" class="btn orange lighten-1">Start Scan</a>
-                        <div id="scan-status">
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <ul id="scan-collection" class="collection">
-                    <ul id="result-area" class = "collapsible" data-collapsible = "accordion">
-                   </ul>
+          <li>
+              <div class="collapsible-header">
+                  <i class="material-icons">help</i>Help
+              </div>
+              <div class="collapsible-body">
+                  <p><b>How to use?</b></p>
+                  <ul style="list-style-type:circle">
+                      <li>1. Go to the "Scan Configuration" section, remove the domains you want to exclude from scanning and click the "START SCAN" button</li>
+                      <li>2. Go the the "Scan Progress & Report" section and visualize the progress of the scan</li>
+                      <li>3. Notice each security issue displayed and make adequate changes in the SuT to resolve the issues based on their severity</li>
+                      <li>4. Re-run the TJob to re-scan the SuT and check whether the resolved security issues are not reported again</li>
                   </ul>
-                </div>
-            </li>
-
-
-            <!-- Help menu -->
-            <li>
-                <div class="collapsible-header">
-                    <i class="material-icons">help</i>Help
-                </div>
-                <div class="collapsible-body">
-                    <span>The ElasTest Security Service can be used to identify insecure URLs and cookies of the web applications involved in a TJob.</span>
-                    <p><b>How to use?</b></p>
-                    <ul style="list-style-type:circle">
-                        <li>1. Go to the "Create New SecJob" section and create a new SecJob by providing the details of a TJob you created at TORM</li>
-                        <li>2. After entering the SecJob details, click the "Create" button. The SecJob you created now should be visible in the "View and Execute SecJobs" section</li>
-                        <li>3. From the "View & Execute SecJobs" section, click the "Execute" button corresponding to the SecJob you created</li>
-                        <li>4. The list of the insecure URLs and cookies should now appear</li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
+              </div>
+          </li>
+      </ul
     </div>
 
     <!-- JQuery Operations -->
