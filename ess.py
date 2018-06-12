@@ -225,7 +225,25 @@ def get_status_ascan():
 @app.route('/ess/api/'+api_version+'/zap/getscanresults/', methods = ['GET'])
 def get_scan_report():
     try:
-        return jsonify( { 'status': "Report fetched","report":zap.core.alerts() } )
+        alerts=zap.core.alerts()
+        high_alerts=[]
+        med_alerts=[]
+        low_alerts=[]
+        sorted_alerts=[]
+        for alert in alerts:
+            if alert["risk"]=="High":
+                high_alerts.append(alert)
+            elif alert["risk"]=="Medium":
+                med_alerts.append(alert)
+            elif alert["risk"]=="Low":
+                low_alerts.append(alert)
+        if len(high_alerts)!=0:
+            sorted_alerts.extend(high_alerts)
+        if len(med_alerts)!=0:
+            sorted_alerts.extend(med_alerts)
+        if len(low_alerts)!=0:
+            sorted_alerts.extend(low_alerts)
+        return jsonify( { 'status': "Report fetched","report":sorted_alerts} )
     except:
         return jsonify( { 'status': "ZAP Exception" } )
 
