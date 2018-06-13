@@ -95,7 +95,6 @@ def get_tjob_stat():
 def get_ess_stat():
         global ess_finished
         if ess_finished==1:
-            print "Finish ESS"
             return jsonify({'status': "finished"})
         else:
             return jsonify({'status': "not-yet"})
@@ -173,7 +172,11 @@ def call_ess():
 def stop_ess():
     global ess_finished
     ess_finished=1
-    print "Call to finish"
+    report=zap.core.alerts()
+    report_path=os.environ['ET_FILES_PATH']
+    report_file = open(report_path,”w”)
+    report_file.write(report) 
+    report_file.close()
     return jsonify( { 'status': "stopped-ess" } )
 
 

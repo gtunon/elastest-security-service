@@ -148,6 +148,7 @@ function make_condi_post(url,body,scondition,fcondition){
 
     $( "#start-scan-btn" ).click(function() {
       $( "#stop-scan-btn" ).show()
+      $( "#start-scan-btn" ).attr("class", "waves-effect waves-light orange lighten-1 btn disabled");
       $("#current_exec_stat").text("Starting Scan");
       $("#tjex-prog").attr("style", "width:"+0+"%");
       domains=$("div.chip");
@@ -170,7 +171,7 @@ function make_condi_post(url,body,scondition,fcondition){
     $( "#stop-scan-btn" ).click(function() {
       $.get("/ess/api/"+api_version+"/stop/", function(data) {
         if (data.status== "stopped-ess") {
-          toast("ESS Stopped")
+          toast("Scanning Stopped")
         }
         else {
           toast("Error")
