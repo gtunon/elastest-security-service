@@ -174,8 +174,8 @@ def stop_ess():
     ess_finished=1
     report=zap.core.alerts()
     report_path=os.environ['ET_FILES_PATH']
-    report_file = open(report_path,"w")
-    report_file.write(report) 
+    report_file = open(report_path+"report.json","w")
+    report_file.write(report)
     report_file.close()
     return jsonify( { 'status': "stopped-ess" } )
 
