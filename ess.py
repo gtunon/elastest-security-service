@@ -175,6 +175,9 @@ def stop_ess():
     report=zap.core.alerts()
     report_path=os.environ['ET_FILES_PATH']
     dirname = os.path.dirname(report_path+"report.json")
+    print("Path is the following")
+    print(report_path)
+    print(report)
     if not os.path.exists(dirname):
     	os.makedirs(dirname)
 	print("Had to make directory")
