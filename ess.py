@@ -175,16 +175,13 @@ def stop_ess():
     report=zap.core.alerts()
     report_path=os.environ['ET_FILES_PATH']
     dirname = os.path.dirname(report_path+"report.json")
-    print("Path is the following")
-    print(report_path)
-    print(report)
     if not os.path.exists(dirname):
     	os.makedirs(dirname)
 	print("Had to make directory")
     else:
-	    report_file = open(report_path+"report.json","w+")
-	    report_file.write(report)
-	    report_file.close()
+	    with open(report_path+"report.json",'w') as f:
+   		f.write(report)
+		print("Report has been written to the file "+report_path+"report.json")
     return jsonify( { 'status': "stopped-ess" } )
 
 
