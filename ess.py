@@ -180,7 +180,7 @@ def stop_ess():
 	print("Had to make directory")
     else:
 	    with open(report_path+"report.json",'w') as f:
-   		f.write(report)
+   		f.write(json.dumps(report))
 		print("Report has been written to the file "+report_path+"report.json")
     return jsonify( { 'status': "stopped-ess" } )
 
