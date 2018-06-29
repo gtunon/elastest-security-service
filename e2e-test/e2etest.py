@@ -82,13 +82,13 @@ def test_create_exec_tjob(tormurl,driver):
 		except:
 			print("\tERROR:: Hello World Project Click failed because ")
 			return "failed"
-
+		time.sleep(10)
 		try:
 			element = driver.find_element(By.XPATH, '//*[@id="tJobs"]/div/table/tbody/tr/td[7]/div/button[2]/span/md-icon')
 			element.click()
 			print("\ta. Hello World TJob Edit Button Clicked")
 		except:
-			print("\tERROR:: Hello World TJob Edit Button Click failed because "+E)
+			print("\tERROR:: Hello World TJob Edit Button Click failed")
 			return "failed"
 		time.sleep(10)
 		try:
