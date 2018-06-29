@@ -27,9 +27,9 @@ def e2etests():
 	tests=["test_load_torm_homepage(tormurl,driver)","test_create_exec_tjob(tormurl,driver)"]
 	#setup Chrome WebDriver
 	options = webdriver.ChromeOptions()
-	#options.add_argument('headless')
+	options.add_argument('headless')
 	options.add_argument('--no-sandbox')
-	driver = webdriver.Firefox() #for testing with GUI locally
+	#driver = webdriver.Firefox() #for testing with GUI locally
 	driver = webdriver.Chrome(chrome_options=options)
 
 	numtests=len(tests)
