@@ -29,7 +29,7 @@ def e2etests():
 	options = webdriver.ChromeOptions()
 	#options.add_argument('headless')
 	options.add_argument('--no-sandbox')
-	#driver = webdriver.Firefox() #for testing with GUI locally
+	driver = webdriver.Firefox() #for testing with GUI locally
 	driver = webdriver.Chrome(chrome_options=options)
 
 	numtests=len(tests)
