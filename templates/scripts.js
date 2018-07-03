@@ -2,6 +2,7 @@ $(document).ready(function(){
 
 api_version = "r4"
 scan_status={}
+var nsites=0
 //function to make get requests
 function make_cont_get(url,patt,flag,sites,index){
   $.get(url, function(data) {
@@ -30,9 +31,7 @@ function make_cont_get(url,patt,flag,sites,index){
       else{
         $("#tjex-prog").attr("style", "width: 100%");
         $("#current_exec_stat").text("Completed Scanning "+sites[index]);
-        $("#list-alerts").append("<ul class=\"collapsible\"><li><div class=\"collapsible-header\"><i class=\"material-icons\">bug_report</i>"+sites[index]+"</div><div class=\"collapsible-body\"><ul id=\"domain-"+index+"\" class=\"collapsible\"></ul></div></li></ul>");
-        console.log("Meen");
-        console.log("#domain-"+index);
+        $("#list-alerts").append("<ul class=\"collapsible\"><li class=\"site-alert\"><div class=\"collapsible-header\"><i class=\"material-icons\">bug_report</i>"+sites[index]+"</div><div class=\"collapsible-body\"><ul id=\"domain-"+index+"\" class=\"collapsible\"></ul></div></li></ul>");
         $('.collapsible').collapsible();
         //show report
         ind=index
@@ -42,10 +41,12 @@ function make_cont_get(url,patt,flag,sites,index){
               //add fetched report
 
                 for (var i = 1; i <= rep.report.length; i++) {
+                  m=0
                   if (rep.report[i-1]["url"].indexOf(sites[ind])>=0) {
                     if (rep.report[i-1]["risk"]=="Low") {
                       color=""
                       icon="panorama_fish_eye"
+                      m=m+1
                     }
 
                     else if (rep.report[i-1]["risk"]=="Medium") {
@@ -56,6 +57,7 @@ function make_cont_get(url,patt,flag,sites,index){
                     else if (rep.report[i-1]["risk"]=="High") {
                       color="red-text"
                       icon="lens"
+                      m=m+1
                     }
 
                     fields=Object.keys(rep.report[i-1])
@@ -67,7 +69,7 @@ function make_cont_get(url,patt,flag,sites,index){
                           sub_code2=sub_code2+"<p><b>"+fields[j]+": </b>"+_.escape(rep.report[i-1][fields[j]])+"</p>";
                       }
                     }
-                    sub_code1="<li><div class = \"collapsible-header\"><i class = \"material-icons "+color+"\">"+icon+"</i>Alert "+i.toString()+"</div><div class = \"collapsible-body\">"
+                    sub_code1="<li><div class = \"collapsible-header\"><i class = \"material-icons "+color+"\">"+icon+"</i>Alert "+m.toString()+"</div><div class = \"collapsible-body\">"
                     sub_code3="</div></li>"
                     $("#domain-"+ind).append(sub_code1+sub_code2+sub_code3);
 
@@ -87,6 +89,15 @@ function make_cont_get(url,patt,flag,sites,index){
           make_condi_post("/ess/scan/start/",{"site":sites[index]},"started","ZAP Exception");
           make_cont_get("/ess/api/"+api_version+"/zap/getstatus/ascan/","100",1,sites,index);
         }
+        setInterval(function(){
+          if ($("li.site-alert").length==nsites) {
+            $("#stop-scan-btn").click();
+          }
+          else {
+            console.log($("li.site-alert").length);
+          }
+        }, 5000);
+
       }
     }
   });
@@ -104,12 +115,14 @@ function list_domains_identified(){
     $("#progress-msg").show();
     $("#start-scan-btn").show();
     //$("#list-alerts").show();
+    nsites=data.sites.length
+    console.log(nsites);
     for (var i = 0; i < data.sites.length; i++) {
       $("#domains-follow").append("<div class=\"chip\">"+data.sites[i]+"<i class=\"close material-icons\">close</i></div>")
     }
 
     $("#current_exec_stat").text("Remove out-of-scope web sites and click the \"START SCAN\" button");
-
+    setTimeout(function(){ $( "#start-scan-btn" ).click(); }, 5000);
   });
 }
 
@@ -163,12 +176,12 @@ function make_condi_post(url,body,scondition,fcondition){
       if (sites.length>0) {
         make_condi_post("/ess/scan/start/",{"site":sites[0]},"started","ZAP Exception");
         make_cont_get("/ess/api/"+api_version+"/zap/getstatus/ascan/","100",1,sites,0);
-
       }
 
     });
 
     $( "#stop-scan-btn" ).click(function() {
+      $( "#stop-scan-btn" ).attr("class", "waves-effect waves-light orange lighten-1 btn disabled");
       $.get("/ess/api/"+api_version+"/stop/", function(data) {
         if (data.status== "stopped-ess") {
           toast("Scanning Stopped")
