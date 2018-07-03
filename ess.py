@@ -28,7 +28,7 @@ auth = HTTPBasicAuth() #for securing api calls using HTTP basic authentication
 ess_called=0
 ess_finished=0
 scans=[] #setting empty secjobs list when api starts
-
+sites_to_be_scanned=[]
 #To be used while implementing HTTPBasicAuth
 @auth.get_password
 def get_password(username):
@@ -161,11 +161,17 @@ def execute_secjob(secjob_id):
     return jsonify({"insecurls":insecure_urls,"inseccookieinfo":results})
 
 #Start Sipder Scan with ZAP
-@app.route('/ess/api/'+api_version+'/start/', methods = ['GET'])
+@app.route('/ess/api/'+api_version+'/start/', methods = ['POST'])
 def call_ess():
     global ess_called
+    global sites_to_be_scanned
     ess_called=1
-    return jsonify( { 'status': "starting-ess" } )
+    if "sites" in request.json.keys() and request.json['sites']!=[]:
+            sites_to_be_scanned=request.json['sites']
+            return jsonify( { 'status': "starting-ess" } )
+    else:
+            return jsonify({'status': "no-sites-found"})
+
 
 #Start Sipder Scan with ZAP
 @app.route('/ess/api/'+api_version+'/stop/', methods = ['GET'])
@@ -188,7 +194,7 @@ def stop_ess():
 #Start Sipder Scan with ZAP
 @app.route('/ess/api/'+api_version+'/getsites/', methods = ['GET'])
 def return_sites():
-    return jsonify( { 'sites': zap.core.sites } )
+    return jsonify( { 'sites': sites_to_be_scanned } )
 
 #Start Sipder Scan with ZAP
 @app.route('/ess/api/'+api_version+'/startspider/', methods = ['POST'])

@@ -93,9 +93,6 @@ function make_cont_get(url,patt,flag,sites,index){
           if ($("li.site-alert").length==nsites) {
             $("#stop-scan-btn").click();
           }
-          else {
-            console.log($("li.site-alert").length);
-          }
         }, 5000);
 
       }
@@ -116,7 +113,6 @@ function list_domains_identified(){
     $("#start-scan-btn").show();
     //$("#list-alerts").show();
     nsites=data.sites.length
-    console.log(nsites);
     for (var i = 0; i < data.sites.length; i++) {
       $("#domains-follow").append("<div class=\"chip\">"+data.sites[i]+"<i class=\"close material-icons\">close</i></div>")
     }
