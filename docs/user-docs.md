@@ -14,9 +14,17 @@ The future releases of ESS will support the detection of:
 
 ## How to launch ESS
 
-ESS can be launched from the ElasTest TORM web-ui. The steps for doing it is as follows.
-1. From the side panel of the web-ui of TORM, click the _Test Support Services_ option, select ESS from the dropdown list of services and clicking the _Create Instance_ button. Then, wait until the ESS instance has been completely launched (meaning the circular spinner that appeared under the _Options_ column of the launched instance stopped spinning).
-2. Click the icon with the shape of an eye corresponding to the _View Service Detail Option_. From the displayed details, scroll down to see the web-ui of ESS. Alternately, the ESS web-ui can be viewed in another tab by clicking on the link corresponding to the option _URL gui:_. For instance, if the value of _URL gui:_ is http://172.18.0.12:80/gui/, either click this link or load the URL http://172.18.0.12:80/gui/ in a new tab.
+Elastest can be launched during the execution of a TJob. The following demo explains how this can be done.
+1. Create a new TJob under a new Project in TORM with the following configuration
+  a. TJob name: ESS demo,
+  b. Current SuT: None,
+  c. Environment Docker Image: dockernash/test-tjob-ess,
+  d. Commands: python fteaching-tjob.py example
+
+2. Leave all the other inpur fields blank and tick the checkboxes for ESS and EUS under the Test Support Services section.
+3. Click Save
+4. Click the execute button
+5. The security alters for the SuT will be displayed under the ess section
 
 ## Basic usage
 ### Scanning a web site using ESS
