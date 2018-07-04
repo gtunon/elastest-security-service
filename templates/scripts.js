@@ -39,9 +39,9 @@ function make_cont_get(url,patt,flag,sites,index){
 
             if (rep.status=="Report fetched") {
               //add fetched report
-
+                m=0
                 for (var i = 1; i <= rep.report.length; i++) {
-                  m=0
+
                   if (rep.report[i-1]["url"].indexOf(sites[ind])>=0) {
                     if (rep.report[i-1]["risk"]=="Low") {
                       color=""
@@ -52,6 +52,7 @@ function make_cont_get(url,patt,flag,sites,index){
                     else if (rep.report[i-1]["risk"]=="Medium") {
                       color="orange-text"
                       icon="lens"
+                      m=m+1
                     }
 
                     else if (rep.report[i-1]["risk"]=="High") {
@@ -89,12 +90,7 @@ function make_cont_get(url,patt,flag,sites,index){
           make_condi_post("/ess/scan/start/",{"site":sites[index]},"started","ZAP Exception");
           make_cont_get("/ess/api/"+api_version+"/zap/getstatus/ascan/","100",1,sites,index);
         }
-        setInterval(function(){
-          if ($("li.site-alert").length==nsites) {
-            $("#stop-scan-btn").click();
-          }
-        }, 5000);
-
+        setInterval(function(){if ($("li.site-alert").length==nsites) {$("#current_exec_stat").text("All Scans Completed");$("#sec-altert-message").text("Identified security alerts are displayed below");$("#stop-scan-btn").click();$("#list-domains").hide()}}, 5000);
       }
     }
   });
@@ -117,7 +113,7 @@ function list_domains_identified(){
       $("#domains-follow").append("<div class=\"chip\">"+data.sites[i]+"<i class=\"close material-icons\">close</i></div>")
     }
 
-    $("#current_exec_stat").text("Remove out-of-scope web sites and click the \"START SCAN\" button");
+    $("#current_exec_stat").text("Security scan can will start soon. Please wait.");
     setTimeout(function(){ $( "#start-scan-btn" ).click(); }, 5000);
   });
 }
@@ -170,8 +166,8 @@ function make_condi_post(url,body,scondition,fcondition){
       }
       $("#show-progress").show()
       if (sites.length>0) {
-        make_condi_post("/ess/scan/start/",{"site":sites[0]},"started","ZAP Exception");
-        make_cont_get("/ess/api/"+api_version+"/zap/getstatus/ascan/","100",1,sites,0);
+          make_condi_post("/ess/scan/start/",{"site":sites[0]},"started","ZAP Exception");
+          make_cont_get("/ess/api/"+api_version+"/zap/getstatus/ascan/","100",1,sites,0);
       }
 
     });

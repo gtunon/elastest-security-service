@@ -52,7 +52,7 @@
             </div>
             <!-- Display Security Issues -->
             <div id="list-alerts" class="collapsible-body">
-              <p>Displaying security alerts</p>
+              <p id="sec-altert-message">Security alerts for each site will be displayed below. Please wait.</p>
             </div>
           </li>
 
@@ -63,10 +63,10 @@
               <div class="collapsible-body">
                   <p><b>How to use?</b></p>
                   <ul style="list-style-type:circle">
-                      <li>1. Go to the "Scan Configuration" section, remove the domains you want to exclude from scanning and click the "START SCAN" button</li>
-                      <li>2. Go the the "Scan Progress & Report" section and visualize the progress of the scan</li>
-                      <li>3. Notice each security issue displayed and make adequate changes in the SuT to resolve the issues based on their severity</li>
-                      <li>4. Re-run the TJob to re-scan the SuT and check whether the resolved security issues are not reported again</li>
+                      <li>1. Create a TJob that calls the ESS APIs for performing the scan</li>
+                      <li>2. Execute the created TJob through Elastest</li>
+                      <li>3. Wait for the TJob execution to finish</li>
+                      <li>4. Check the displayed alerts. The alerts shown in red are high-risk, the ones shown in orange are medium-risk and the ones shown in white are low-risk</li>
                   </ul>
               </div>
           </li>
