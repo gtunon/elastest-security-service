@@ -15,11 +15,11 @@ The future releases of ESS will support the detection of:
 ## How to launch ESS
 
 Elastest can be launched during the execution of a TJob. The following demo explains how this can be done.
-1. Create a new TJob under a new Project in TORM with the following configuration
-  a. TJob name: ESS demo,
-  b. Current SuT: None,
-  c. Environment Docker Image: dockernash/test-tjob-ess,
-  d. Commands: python fteaching-tjob.py example
+1. Create a new TJob under a new Project in TORM with the following configuration:
+  (a.) TJob name: ESS demo,
+  (b.) Current SuT: None,
+  (c.) Environment Docker Image: dockernash/test-tjob-ess,
+  (d.) Commands: python fteaching-tjob.py example
 
 2. Leave all the other inpur fields blank and tick the checkboxes for ESS and EUS under the Test Support Services section.
 3. Click Save
