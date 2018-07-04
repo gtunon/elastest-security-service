@@ -103,6 +103,7 @@ def get_ess_stat():
 @app.route('/ess/scan/start/', methods = ['POST'])
 def start_scan():
     if "site" in request.json.keys() and request.json['site']!="":
+            print(request.json['site'])
             zap.ascan.scan(request.json['site'])
             return jsonify({'status': "Started Active Scanning"})
     else:
