@@ -175,10 +175,7 @@ function make_condi_post(url,body,scondition,fcondition){
     $( "#stop-scan-btn" ).click(function() {
       $( "#stop-scan-btn" ).attr("class", "waves-effect waves-light orange lighten-1 btn disabled");
       $.get("/ess/api/"+api_version+"/stop/", function(data) {
-        if (data.status== "stopped-ess") {
-          toast("Scanning Stopped")
-        }
-        else {
+        if (data.status!= "stopped-ess") {
           toast("Error")
         }
       });
