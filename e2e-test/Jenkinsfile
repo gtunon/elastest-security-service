@@ -8,7 +8,6 @@ node(){
                    sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
            stage ('prepare')
                git 'https://github.com/elastest/elastest-security-service.git'
-               git 'https://github.com/elastest/elastest-torm.git'
                elastest_url = env.ET_SUT_PROTOCOL + '://' + env.ET_SUT_HOST + ':' + env.ET_SUT_PORT
 
            stage ("E2E tests")
