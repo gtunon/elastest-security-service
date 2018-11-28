@@ -13,7 +13,7 @@ node(){
 
            stage ("E2E tests")
                sh "pip install requests"
-               sh "cd e2e-test;python e2etest.py "+elastest_url
+               sh "cd e2e-test;ls;python e2etest.py "+elastest_url+"/"
            }
     }
 }
