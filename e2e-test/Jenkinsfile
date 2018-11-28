@@ -1,23 +1,23 @@
-def elastest_url = ''
 node(){
-    elastest(tss: ['ESS'], surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml', project: 'ETinET', sut: 11) {
-    stage ('docker container')
-        def mycontainer = elastest.ctx.docker.image('elastest/ci-docker-e2e-compose-py:latest')
-        mycontainer.pull()
-        mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw -v /dev/shm:/dev/shm")  {
-            sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
+  elastest(
+           tss:['EUS'],
+           surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml',
+           project: 'ETinET', sut: 11) {
+           stage ('docker container')
+               def mycontainer = elastest.ctx.docker.image('elastest/ci-docker-e2e-compose-py:latest')
+               mycontainer.pull()
+               mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw -v /dev/shm:/dev/shm")  {
+                   sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
+           stage ('prepare')
+               git 'https://github.com/elastest/elastest-security-service.git'
+               elastest.connect2ElastestNetwork()
+               def elastestUser = elastest.getElasTestUser()
+               def elastestPass = elastest.getElasTestPassword()
+               def elastestURL = "http://" + elastestUser +":"+ elastestPass+"@"+elastest.getIp()+":"+elastest.getPort()
 
-            stage ('prepare')
-                git 'https://github.com/elastest/elastest-security-service.git'
-                elastest.connect2ElastestNetwork()
-    def elastestUser = elastest.getElasTestUser()
-                def elastestPass = elastest.getElasTestPassword()
-                def elastestURL = "http://" + elastestUser +":"+ elastestPass+"@"+elastest.getIp()+":"+elastest.getPort()
-
-            stage ("E2E tests")
-                sh "pip install requests"
-          sh "cd e2e-test;python e2etest.py "+elastestURL
-
-        }
+           stage ("E2E tests")
+               sh "pip install requests"
+               sh "cd e2e-test;python e2etest.py "+elastestURL
+           }
     }
 }
