@@ -71,6 +71,7 @@ def test_load_torm_homepage(tormurl,driver):
 			print("\ta. TORM home page preloader loaded successfully")
 		except:
 			print("\ta. Test to load TORM home page prealoader failed")
+			print("Unexpected error:", sys.exc_info()[0])
 			return "failed"
 		return "success"
 
