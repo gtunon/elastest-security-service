@@ -1,6 +1,7 @@
 [![License badge](https://img.shields.io/badge/license-Apache2-green.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Documentation badge](https://img.shields.io/badge/docs-latest-brightgreen.svg)](http://elastest.io/docs/)
 [![Build Status](https://ci.elastest.io/jenkins/buildStatus/icon?job=elastest-security-service/ess)](https://ci.elastest.io/jenkins/job/elastest-security-service/ess)
+[![codecov](https://codecov.io/gh/elastest/elastest-security-service/branch/master/graph/badge.svg)](https://codecov.io/gh/elastest/elastest-security-service)
 
 [![][ElasTest Logo]][ElasTest]
 
@@ -14,7 +15,7 @@ The ElasTest Security Service (ESS) can be used to detect security vulnerabiliti
 2. Denial-of-Service
 3. Improper/Missing authentication
 
-The documentation for using the component is available [here](https://docs.google.com/document/d/1bKEMpXKUAaE0Re7hNxCKY99D6HSuy96cwqZ5rQkEERs/edit?usp=sharing).
+The documentation for using the component is available [here](https://github.com/elastest/elastest-security-service/blob/master/docs/user-docs.md).
 
 What is ElasTest
 -----------------

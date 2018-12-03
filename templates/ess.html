@@ -1,90 +1,84 @@
 <!DOCTYPE html>
-  <html>
-    <head>
-      <!--Import Google Icon Font-->
-      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!--Import materialize.css-->
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+<html>
 
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <!--Import JQuery-->
-      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<head>
+    <title>ElasTest Security Service</title>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <!--To get rid of the annoying firefox warning-->
+    <meta charset="utf-8"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Import JQuery-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js">
 
-      <script>
-              $(document).ready(function(){
-                  $("p").click(function(){
-                      $(this).hide();
-                  });
-              });
-      </script>
-      <title>ElasTest Security Service</title>
-      <script>
-              $(document).ready(function(){
-                  $("#create-sjob").click(function(){
-                      $(this).hide();
-                  });
-              });
-      </script>
-    </head>
-    <body>
-      <!--Import jQuery before materialize.js-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+    </script>
+    <script src="scripts.js"></script>
+</head>
 
+<body>
+    <!--Import jQuery before materialize.js-->
 
-
-        <!-- LEFT LOGO -->
-        <nav>
-          <div class="nav-wrapper blue">
+    <!-- LEFT LOGO -->
+    <nav>
+        <div class="nav-wrapper grey darken-1">
             <a href="" class="brand-logo">ElasTest Security Service</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a class="active" href="#home">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </div>
-        </nav>
-        <!-- SecJob Operations -->
-        <div id="home">
-          <ul class="collapsible" data-collapsible="accordion">
-            <li>
-              <div class="collapsible-header active">
-                <i class="material-icons">create</i>Create New SecJob
-              </div>
-              <div class="collapsible-body">
-                <form>
-                  <div class="input-field">
-                    <input type="text" id="secjobname">
-                    <label class="active" for="secjobname">SecJob Name*</label>
-                  </div>
-                  <div class="input-field">
-                    <input type="text" id="tjobid">
-                    <label class="active" for="tjobid">TJob ID*</label>
-                  </div>
-                  <div class="input-field">
-                    <textarea type="text" id="secjobdesc" class="materialize-textarea"></textarea>
-                    <label class="active" for="secjobdesc">SecJob Description</label>
-                  </div>
-                  <a onclick="toast()" id="create-sjob" class="btn">Create</a>
-                </form>
-              </div>
-            </li>
-
-            <li>
-              <div class="collapsible-header">
-                <i class="material-icons">help</i>Help
-              </div>
-              <div class="collapsible-body">
-                <span>The ElasTest Security Service can be used to identify insecure cookies of a web application.</span>
-              </div>
-            </li>
-          </ul>
         </div>
-        <!-- JQuery Operations -->
-        <script type="text/javascript">
-          function toast() {
-            Materialize.toast('SecJob Created', 4000, 'rounded')
+    </nav>
+    <!-- Scan Operations -->
+    <div id="main">
+
+      <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <!-- Show Details of the TJob execution and security scan -->
+            <div class="collapsible-header active"><i class="material-icons">assessment</i>Scan Progress & Report</div>
+            <!-- Show TJob Execution Progress -->
+            <div class="collapsible-body"><p id="current_exec_stat">Waiting for input from TJob...</p>
+              <div class="progress grey">
+                <div id="tjex-prog" class="indeterminate orange lighten-1"></div>
+              </div>
+            </div>
+            <!-- List domains -->
+            <div id="list-domains" class="collapsible-body">
+              <div id="domains-follow">
+              </div>
+              <a id="start-scan-btn" class="waves-effect waves-light orange lighten-1 btn">Start Scan</a>
+              <a id="stop-scan-btn" class="waves-effect waves-light orange lighten-1 btn">Stop Scan</a>
+            </div>
+            <!-- Display Security Issues -->
+            <div id="list-alerts" class="collapsible-body">
+              <p id="sec-altert-message">Security alerts for each site will be displayed below. Please wait.</p>
+            </div>
+          </li>
+
+          <li>
+              <div class="collapsible-header">
+                  <i class="material-icons">help</i>Help
+              </div>
+              <div class="collapsible-body">
+                  <p><b>How to use?</b></p>
+                  <ul style="list-style-type:circle">
+                      <li>1. Create a TJob that calls the ESS APIs for performing the scan</li>
+                      <li>2. Execute the created TJob through Elastest</li>
+                      <li>3. Wait for the TJob execution to finish</li>
+                      <li>4. Check the displayed alerts. The alerts shown in red are high-risk, the ones shown in orange are medium-risk and the ones shown in white are low-risk</li>
+                  </ul>
+              </div>
+          </li>
+      </ul
+    </div>
+
+    <!-- JQuery Operations -->
+    <script type="text/javascript">
+        function toast(message,time) {
+            Materialize.toast(message, time, 'rounded')
           }
-        </script>
-    </body>
-  </html>
+    </script>
+</body>
+
+</html>
