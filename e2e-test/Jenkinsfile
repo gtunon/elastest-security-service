@@ -1,5 +1,5 @@
 def elastest_url = ''
-node(){
+node('et_in_et'){
   elastest(tss:['ESS'],surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml',project: 'ETinET', sut: 11) {
            stage ('docker container')
                def mycontainer = docker.image('elastest/ci-docker-e2e-compose-py:latest')
