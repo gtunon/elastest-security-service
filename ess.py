@@ -110,9 +110,8 @@ def start_scan():
             return jsonify({'status': "ZAP Exception"})
 
 
-#Function containing all avinash-made passive scan naive logic
-@app.route('/ess/api/'+api_version+'/secjobs/<int:secjob_id>/exec/', methods = ['GET'])
-def execute_secjob(secjob_id):
+#Function containing all cookie security logic
+def get_cookie_sec_report():
     #Logic for detecting non-HTTPS URLs
     all_tjob_urls=list(set(zap.core.urls()))
     insecure_urls=[]
@@ -186,9 +185,13 @@ def stop_ess():
     	os.makedirs(dirname)
 	print("Had to make directory")
     else:
-	    with open(report_path+"report.json",'w') as f:
-   		f.write(json.dumps(report))
-		print("Report has been written to the file "+report_path+"report.json")
+        with open(report_path+"zap-report.json",'w') as f:
+   		       f.write(json.dumps(report))
+        print("ZAP Scan Report has been written to the file "+report_path+"zap-report.json")
+        with open(report_path+"cookie-report.json",'w') as f:
+            f.write(json.dumps(get_cookie_sec_report()))
+        print("Cookie security report has been written to the file "+report_path+"cookie-report.json")
+
     return jsonify( { 'status': "stopped-ess" } )
 
 
