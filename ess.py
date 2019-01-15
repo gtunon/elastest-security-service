@@ -158,7 +158,7 @@ def get_cookie_sec_report():
                     	result["nonsamesitecookies"].append(field.lstrip("Set-Cookie:").strip().split(";")[0])
     	if len(result["insecurecookies"])!=0 or len(result["nonhttponlycookies"])!=0 or len(result["nonsamesitecookies"])!=0:
     		results.append(result.copy())
-    return jsonify({"insecurls":insecure_urls,"inseccookieinfo":results})
+    return {"insecurls":insecure_urls,"inseccookieinfo":results}
 
 #Start Sipder Scan with ZAP
 @app.route('/ess/api/'+api_version+'/start/', methods = ['POST'])
@@ -183,13 +183,13 @@ def stop_ess():
     dirname = os.path.dirname(report_path+"report.json")
     if not os.path.exists(dirname):
     	os.makedirs(dirname)
-	print("Had to make directory")
+    	print("Had to make directory")
     else:
         with open(report_path+"zap-report.json",'w') as f:
    		       f.write(json.dumps(report))
         print("ZAP Scan Report has been written to the file "+report_path+"zap-report.json")
         with open(report_path+"cookie-report.json",'w') as f:
-            f.write(json.dumps(get_cookie_sec_report()))
+            f.write(str(get_cookie_sec_report()))
         print("Cookie security report has been written to the file "+report_path+"cookie-report.json")
 
     return jsonify( { 'status': "stopped-ess" } )
