@@ -24,13 +24,18 @@ def e2etests():
 	print("TORM URL is: "+tormurl)
 	#List of all the tests to be run. Append to this list the new tests
 	#tests=["test_load_torm_home_preloader(tormurl,driver)","test_load_torm_home_full(tormurl+\"/api/context/services/info\",driver)","test_service_launch(tormurl,driver)","test_create_new_project(tormurl+\"/api/project\",driver)","test_create_new_tjob(tormurl+\"/api/tjob\")","test_run_tjob(tormurl,driver)"]
-	tests=["test_load_torm_homepage(tormurl,driver)","test_create_exec_tjob(tormurl,driver)"]
+	#tests=["test_load_torm_homepage(tormurl,driver)","test_create_exec_tjob(tormurl,driver)"]
+	tests=["test_load_torm_homepage(tormurl,driver)"]
 	#setup Chrome WebDriver
+    	eusUrl=os.environ['ET_EUS_API']
+    	print("EUS URL is: "+str(eusUrl))
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
 	options.add_argument('--no-sandbox')
+	capabilities = options.to_capabilities()
+        driver = webdriver.Remote(command_executor=eusUrl, desired_capabilities=capabilities)
 	#driver = webdriver.Firefox() #for testing with GUI locally
-	driver = webdriver.Chrome(chrome_options=options)
+	#driver = webdriver.Chrome(chrome_options=options)
 
 	numtests=len(tests)
 	testssuccess=0
