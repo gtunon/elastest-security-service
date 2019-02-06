@@ -27,13 +27,13 @@ def e2etests():
 	#tests=["test_load_torm_homepage(tormurl,driver)","test_create_exec_tjob(tormurl,driver)"]
 	tests=["test_load_torm_homepage(tormurl,driver)"]
 	#setup Chrome WebDriver
-    	eusUrl=os.environ['ET_EUS_API']
-    	print("EUS URL is: "+str(eusUrl))
+	eusUrl=os.environ['ET_EUS_API']
+	print("EUS URL is: "+str(eusUrl))
 	options = webdriver.ChromeOptions()
 	options.add_argument('headless')
 	options.add_argument('--no-sandbox')
 	capabilities = options.to_capabilities()
-        driver = webdriver.Remote(command_executor=eusUrl, desired_capabilities=capabilities)
+	driver = webdriver.Remote(command_executor=eusUrl, desired_capabilities=capabilities)
 	#driver = webdriver.Firefox() #for testing with GUI locally
 	#driver = webdriver.Chrome(chrome_options=options)
 
