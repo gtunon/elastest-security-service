@@ -1,0 +1,18 @@
+def elastest_url = ''
+node('et_in_et'){
+  elastest(tss:['EUS'],surefireReportsPattern: '**/target/surefire-reports/TEST-*.xml',project: 'ETinET', sut: 11) {
+           stage ('docker container')
+               def mycontainer = docker.image('elastest/ci-docker-e2e-compose-py:latest')
+               mycontainer.pull()
+               mycontainer.inside("-u jenkins -v /var/run/docker.sock:/var/run/docker.sock:rw -v /dev/shm:/dev/shm")  {
+                   sh '/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &'
+           stage ('prepare')
+               git 'https://github.com/elastest/elastest-security-service.git'
+               elastest_url = env.ET_SUT_PROTOCOL + '://elastest:3xp3r1m3nt47@' + env.ET_SUT_HOST + ':' + env.ET_SUT_PORT
+
+           stage ("E2E tests")
+               sh "pip install requests"
+               sh "cd e2e-test;ls;python e2etest.py "+elastest_url+"/"
+           }
+    }
+}
