@@ -29,12 +29,12 @@ def e2etests():
 	
 	#Guio: Use an if. If not you won't be able to execute externaly to ElasTest
 	if eusUrl!=null:
-		print("EUS URL is: "+str(eusUrl))
+		print("Using remote EUS URL is: "+str(eusUrl))
 		driver = webdriver.Remote(command_executor=eusUrl, desired_capabilities=capabilities)
-	
 	else:
 	#	driver = webdriver.Firefox() #for testing with GUI locally
 	#	or...
+	    print("Using local")
 		driver = webdriver.Chrome(chrome_options=options)
 	
 	numtests=len(tests)
